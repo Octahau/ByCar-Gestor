@@ -49,13 +49,7 @@ export default function Vehiculos() {
     };
 
     // Filtrar datos según el input de búsqueda
-    const filteredData = vehiculos.filter((v) =>
-        Object.values(v).some((val) =>
-            String(val).toLowerCase().includes(search.toLowerCase())
-        )
-    );
-
-
+    const filteredData = vehiculos.filter((v) => Object.values(v).some((val) => String(val).toLowerCase().includes(search.toLowerCase())));
 
     return (
         <AppLayout breadcrumbs={[{ title: 'Vehículos', href: '/vehiculos' }]}>
