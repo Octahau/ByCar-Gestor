@@ -29,7 +29,7 @@ const data = {
     navMain: [
         {
             title: 'Dashboard',
-            href: '#',
+            href: '/dashboard', // ruta a la página de dashboard
             icon: IconDashboard, // panel de control
         },
         {

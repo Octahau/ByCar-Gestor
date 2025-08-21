@@ -15,6 +15,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::resource('/vehiculos', VehiculoController::class);
-
+Route::get('/ventas', [VehiculoController::class, 'index'])->name('vehiculos.index');
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

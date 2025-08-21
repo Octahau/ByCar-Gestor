@@ -65,19 +65,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Badge } from './ui/badge';
 
 export const schema = z.object({
     id: z.number(),
-    marca: z.string(),
-    modelo: z.string(),
-    dominio: z.string(),
-    anio: z.number(),
-    color: z.string(),
-    kilometraje: z.number(),
-    precioARS: z.number(),
-    precioUSD: z.number(),
+    marca: z.string().optional(),
+    modelo: z.string().optional(),
+    dominio: z.string().optional(),
+    anio: z.number().optional(),
+    color: z.string().optional(),
+    kilometraje: z.number().optional(),
+    precioARS: z.number().optional(),
+    precioUSD: z.number().optional(),
     ubicacion: z.string().optional(),
 });
 
@@ -123,16 +124,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     { accessorKey: 'marca', header: 'Marca' },
     { accessorKey: 'modelo', header: 'Modelo' },
     { accessorKey: 'dominio', header: 'Dominio' },
-    { accessorKey: 'año', header: 'Año' },
+    { accessorKey: 'anio', header: 'Año' },
     { accessorKey: 'color', header: 'Color' },
     { accessorKey: 'kilometraje', header: 'Kilometraje' },
-    { accessorKey: 'km', header: 'Km' },
-    { accessorKey: 'infoauto', header: 'Infoauto' },
-    { accessorKey: 'precio_ars', header: 'Precio ARS' },
-    { accessorKey: 'precio_usd', header: 'Precio USD' },
-    { accessorKey: 'antiguedad', header: 'Antiguedad' },
+    { accessorKey: 'precioARS', header: 'Precio ARS' },
+    { accessorKey: 'precioUSD', header: 'Precio USD' },
     { accessorKey: 'ubicacion', header: 'Ubicación' },
-    { accessorKey: 'ingreso', header: 'Ingreso' },
     {
         id: 'actions',
         cell: () => (
@@ -140,15 +137,14 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="size-8" size="icon">
                         <IconDotsVertical />
-                        <span className="sr-only">Open menu</span>
+                        <span className="sr-only">Abrir menu</span>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Make a copy</DropdownMenuItem>
-                    <DropdownMenuItem>Favorite</DropdownMenuItem>
+                    <DropdownMenuItem>Editar</DropdownMenuItem>
+                    <DropdownMenuItem>Marcar como favorito</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+                    <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
@@ -179,7 +175,12 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
 }
 
 export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[] }) {
-    const [data, setData] = React.useState(() => initialData);
+    const [data, setData] = React.useState<z.infer<typeof schema>[]>(() => initialData ?? []);
+
+    React.useEffect(() => {
+        if (initialData) setData(initialData);
+    }, [initialData]);
+
     const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -235,34 +236,34 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                 <Label htmlFor="view-selector" className="sr-only">
                     View
                 </Label>
-                <Select defaultValue="outline">
+                {/* <Select defaultValue="outline">
                     <SelectTrigger className="flex w-fit @4xl/main:hidden" size="sm" id="view-selector">
                         <SelectValue placeholder="Select a view" />
                     </SelectTrigger>
-                    {/*   <SelectContent>
-            <SelectItem value="outline">Outline</SelectItem>
-            <SelectItem value="past-performance">Past Performance</SelectItem>
-            <SelectItem value="key-personnel">Key Personnel</SelectItem>
-            <SelectItem value="focus-documents">Focus Documents</SelectItem>
-          </SelectContent> */}
+                    <SelectContent>
+                        <SelectItem value="outline">Outline</SelectItem>
+                        <SelectItem value="past-performance">Past Performance</SelectItem>
+                        <SelectItem value="key-personnel">Key Personnel</SelectItem>
+                        <SelectItem value="focus-documents">Focus Documents</SelectItem>
+                    </SelectContent>
                 </Select>
-                {/* <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-          <TabsTrigger value="outline">Outline</TabsTrigger>
-          <TabsTrigger value="past-performance">
-            Past Performance <Badge variant="secondary">3</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="key-personnel">
-            Key Personnel <Badge variant="secondary">2</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
-        </TabsList> */}
+                <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
+                    <TabsTrigger value="outline">Outline</TabsTrigger>
+                    <TabsTrigger value="past-performance">
+                        Past Performance <Badge variant="secondary">3</Badge>
+                    </TabsTrigger>
+                    <TabsTrigger value="key-personnel">
+                        Key Personnel <Badge variant="secondary">2</Badge>
+                    </TabsTrigger>
+                    <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
+                </TabsList> */}
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="sm">
                                 <IconLayoutColumns />
                                 <span className="hidden lg:inline">Modificar columnas</span>
-                                <span className="lg:hidden">Columns</span>
+                                <span className="lg:hidden">Columnas</span>
                                 <IconChevronDown />
                             </Button>
                         </DropdownMenuTrigger>
@@ -323,7 +324,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={columns.length} className="h-24 text-center">
-                                            No results.
+                                            Sin resultados.
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -333,12 +334,12 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                 </div>
                 <div className="flex items-center justify-between px-4">
                     <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
-                        {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
+                        {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
                     </div>
                     <div className="flex w-full items-center gap-8 lg:w-fit">
                         <div className="hidden items-center gap-2 lg:flex">
                             <Label htmlFor="rows-per-page" className="text-sm font-medium">
-                                Rows per page
+                                Filas por página
                             </Label>
                             <Select
                                 value={`${table.getState().pagination.pageSize}`}
@@ -359,7 +360,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                             </Select>
                         </div>
                         <div className="flex w-fit items-center justify-center text-sm font-medium">
-                            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                            Pagina {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                         </div>
                         <div className="ml-auto flex items-center gap-2 lg:ml-0">
                             <Button
@@ -368,7 +369,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 onClick={() => table.setPageIndex(0)}
                                 disabled={!table.getCanPreviousPage()}
                             >
-                                <span className="sr-only">Go to first page</span>
+                                <span className="sr-only">Ir a la primer pagina</span>
                                 <IconChevronsLeft />
                             </Button>
                             <Button
@@ -378,7 +379,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 onClick={() => table.previousPage()}
                                 disabled={!table.getCanPreviousPage()}
                             >
-                                <span className="sr-only">Go to previous page</span>
+                                <span className="sr-only">Ir a la pagina previa</span>
                                 <IconChevronLeft />
                             </Button>
                             <Button
@@ -388,7 +389,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 onClick={() => table.nextPage()}
                                 disabled={!table.getCanNextPage()}
                             >
-                                <span className="sr-only">Go to next page</span>
+                                <span className="sr-only">Ir a la proxima pagina</span>
                                 <IconChevronRight />
                             </Button>
                             <Button
@@ -398,7 +399,7 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                                 disabled={!table.getCanNextPage()}
                             >
-                                <span className="sr-only">Go to last page</span>
+                                <span className="sr-only">Ir a la ultima pagina</span>
                                 <IconChevronsRight />
                             </Button>
                         </div>
@@ -476,8 +477,8 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
                                     <Input id={`dominio-${item.id}`} defaultValue={item.dominio} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`año-${item.id}`}>Año</Label>
-                                    <Input id={`año-${item.id}`} defaultValue={item.anio} />
+                                    <Label htmlFor={`anio-${item.id}`}>Año</Label>
+                                    <Input id={`anio-${item.id}`} defaultValue={item.anio} />
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <Label htmlFor={`color-${item.id}`}>Color</Label>
@@ -488,12 +489,12 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
                                     <Input id={`kilometraje-${item.id}`} defaultValue={item.kilometraje} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`precio-ars-${item.id}`}>Precio ARS</Label>
-                                    <Input id={`precio-ars-${item.id}`} defaultValue={item.precioARS} />
+                                    <Label htmlFor={`precioARS-${item.id}`}>Precio ARS</Label>
+                                    <Input id={`precioARS-${item.id}`} defaultValue={item.precioARS} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`precio-usd-${item.id}`}>Precio USD</Label>
-                                    <Input id={`precio-usd-${item.id}`} defaultValue={item.precioUSD} />
+                                    <Label htmlFor={`precioUSD-${item.id}`}>Precio USD</Label>
+                                    <Input id={`precioUSD-${item.id}`} defaultValue={item.precioUSD} />
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <Label htmlFor={`ubicacion-${item.id}`}>Ubicacion</Label>

@@ -7,6 +7,7 @@ import { Vehiculo } from '@/types';
 import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 interface AddVehiculoModalProps {
     onVehiculoCreado: (veh: Vehiculo) => void;
@@ -32,13 +33,14 @@ export default function AddVehiculoModal({ onVehiculoCreado }: AddVehiculoModalP
     const onSubmit = async (data: Vehiculo) => {
         const payload = {
             ...data,
-            anio: Number(data.anio),
-            kilometraje: Number(data.kilometraje),
-            precioARS: Number(data.precioARS),
-            precioUSD: Number(data.precioUSD),
+            anio: Number(data.anio) || null,
+            kilometraje: Number(data.kilometraje) || 0,
+            precioARS: Number(data.precioARS) || 0,
+            precioUSD: Number(data.precioUSD) || 0,
         };
 
         try {
+
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const response = await fetch('/vehiculos', {
                 method: 'POST',
@@ -51,11 +53,10 @@ export default function AddVehiculoModal({ onVehiculoCreado }: AddVehiculoModalP
             });
 
             const result = await response.json();
-
             if (result.success) {
                 // Mapear correctamente los datos antes de pasarlos al padre
                 const nuevoVehiculo: Vehiculo = {
-                    id: result.vehiculo.vehicle_id,
+                    id: result.vehiculo.id,
                     marca: result.vehiculo.marca,
                     modelo: result.vehiculo.modelo,
                     dominio: result.vehiculo.dominio,
@@ -69,13 +70,14 @@ export default function AddVehiculoModal({ onVehiculoCreado }: AddVehiculoModalP
 
                 onVehiculoCreado(nuevoVehiculo);
                 setOpen(false);
-                alert('Vehículo agregado con éxito');
+                toast.success('Vehículo agregado correctamente');
             } else {
                 console.error('Errores de validación:', result.errors);
-                alert('Error al agregar vehículo');
+                toast.error('Error al agregar vehículo: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error fetch:', error);
+            toast.error('Error al agregar vehículo: ' + (error instanceof Error ? error.message : ''));
         }
     };
 
