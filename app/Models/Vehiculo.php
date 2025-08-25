@@ -14,5 +14,10 @@ class Vehiculo extends Model
      */
     protected $primaryKey = 'vehicle_id';
     // app/Models/Vehiculo.php
-    protected $fillable = ['marca', 'modelo', 'dominio', 'anio', 'color', 'kilometraje', 'precioARS', 'precioUSD', 'ubicacion'];
+    protected $fillable = ['marca', 'modelo', 'dominio', 'anio', 'color', 'kilometraje', 'precioARS', 'precioUSD', 'ubicacion' , 'estado', 'infoAuto', 'fecha'];
+
+    // Opcional: castear fecha a tipo date/datetime
+    protected $casts = [
+        'fecha' => 'date',
+    ];
 }

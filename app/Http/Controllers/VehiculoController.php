@@ -27,6 +27,8 @@ class VehiculoController extends Controller
             "precioARS" => $request->input("precioARS"),
             "precioUSD" => $request->input("precioUSD"),
             "ubicacion" => $request->input("ubicacion"),
+            "fecha" => $request->input("fecha"),
+            "infoAuto" => $request->input("infoAuto")
         ];
 
         try {
@@ -40,13 +42,33 @@ class VehiculoController extends Controller
                 'precioARS' => 'nullable|numeric|min:0',
                 'precioUSD' => 'nullable|numeric|min:0',
                 'ubicacion' => 'nullable|string|max:255',
+                'fecha' => 'nullable|date',
+                'infoAuto' => 'nullable|string|max:255',
             ])->validate();
 
-            logger('Datos validados antes de crear:', $validated);
+
+            $validated['estado'] = \App\Enums\EstadoVehiculo::DISPONIBLE->value;
 
             $vehiculo = Vehiculo::create($validated);
 
-            return response()->json(['success' => true, 'vehiculo' => $vehiculo]);
+            return response()->json([
+                'success' => true,
+                'vehiculo' => [
+                    'id' => $vehiculo->vehicle_id,
+                    'marca' => $vehiculo->marca,
+                    'modelo' => $vehiculo->modelo,
+                    'dominio' => $vehiculo->dominio,
+                    'anio' => (int) $vehiculo->anio,
+                    'color' => $vehiculo->color,
+                    'kilometraje' => (int) $vehiculo->kilometraje,
+                    'precioARS' => (int) $vehiculo->precioARS,
+                    'precioUSD' => (int) $vehiculo->precioUSD,
+                    'ubicacion' => $vehiculo->ubicacion,
+                    'fecha' => $vehiculo->fecha,
+                    'infoAuto' => $vehiculo->infoAuto,
+                    'estado' => $vehiculo->estado,
+                ]
+            ]);
         } catch (\Illuminate\Database\QueryException $e) {
             logger('Error DB: ', ['message' => $e->getMessage()]);
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
@@ -61,33 +83,34 @@ class VehiculoController extends Controller
      */
     public function index(Request $request)
     {
-        $vehiculos = Vehiculo::all();
-
-        $formatted = $vehiculos->map(function ($v) {
-            return [
-                'id' => $v->vehicle_id,
-                'marca' => $v->marca,
-                'modelo' => $v->modelo,
-                'dominio' => $v->dominio,
-                'anio' => (int) $v->anio,
-                'color' => $v->color,
-                'kilometraje' => (int) $v->kilometraje,
-                'precioARS' => (int) $v->precioARS,
-                'precioUSD' => (int) $v->precioUSD,
-                'ingreso' => $v->created_at->toDateString(),
-                'ubicacion' => $v->ubicacion,
-            ];
-        });
-
         if ($request->wantsJson()) {
+            $vehiculos = Vehiculo::all();
+
+            $formatted = $vehiculos->map(function ($v) {
+                return [
+                    'id' => $v->vehicle_id, 
+                    'marca' => $v->marca,
+                    'modelo' => $v->modelo,
+                    'dominio' => $v->dominio,
+                    'anio' => (int) $v->anio,
+                    'color' => $v->color,
+                    'kilometraje' => (int) $v->kilometraje,
+                    'precioARS' => (int) $v->precioARS,
+                    'precioUSD' => (int) $v->precioUSD,
+                    'ubicacion' => $v->ubicacion,
+                    'fecha' => $v->fecha,
+                    'infoAuto' => $v->infoAuto,
+                    'estado' => $v->estado,
+                ];
+            });
+
             return response()->json([
                 'success' => true,
                 'vehiculos' => $formatted,
             ]);
         }
-        
-        return Inertia::render('vehiculos', [
-            'vehiculos' => $formatted,
-        ]);
+
+        // si no pide JSON, devolver vista Inertia normal
+        return Inertia::render('Vehiculos');
     }
 }

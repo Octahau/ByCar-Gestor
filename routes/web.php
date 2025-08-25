@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\VehiculoController;
+use App\Http\Controllers\VentasController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -14,7 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-Route::resource('/vehiculos', VehiculoController::class);
-Route::get('/ventas', [VehiculoController::class, 'index'])->name('vehiculos.index');
+Route::resource('vehiculos', VehiculoController::class);
+Route::resource('/ventas', VentasController::class);
+Route::resource('/registro', UserController::class);
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

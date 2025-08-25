@@ -67,7 +67,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Badge } from './ui/badge';
+import { Badge } from '../ui/badge';
 
 export const schema = z.object({
     id: z.number(),

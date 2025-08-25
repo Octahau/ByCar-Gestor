@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Venta extends Model
+{
+    use HasFactory;
+
+    protected $table = 'ventas';
+    protected $primaryKey = 'venta_id';
+
+    protected $fillable = [
+        'vehicle_id',
+        'procedencia',
+        'valor_venta_ars',
+        'valor_venta_usd',
+        'ganancia_real_ars',
+        'ganancia_real_usd',
+        'vendedor',
+        'fecha',
+    ];
+
+    protected $casts = [
+        'fecha' => 'date',
+    ];
+
+    // Relación: una venta pertenece a un vehículo
+    public function vehiculo()
+    {
+        return $this->belongsTo(Vehiculo::class);
+    }
+}

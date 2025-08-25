@@ -1,5 +1,5 @@
 'use client';
-import { DataTable } from '@/components/data-table';
+import { DataTable } from '@/components/vehicles/data-table';
 import FiltrosModal from '@/components/vehicles/modal-filtros';
 import AddVehiculoModal from '@/components/vehicles/modal-vehicle';
 import AppLayout from '@/layouts/app-layout';
@@ -26,6 +26,7 @@ export default function Vehiculos() {
         try {
             const response = await fetch('/vehiculos', { headers: { Accept: 'application/json' } });
             const result = await response.json();
+            console.log('Respuesta JSON:', result);
 
             if (result.success && Array.isArray(result.vehiculos)) {
                 const formatted = result.vehiculos.map((v: any) => ({
@@ -39,6 +40,8 @@ export default function Vehiculos() {
                     precioARS: Number(v.precioARS),
                     precioUSD: Number(v.precioUSD),
                     ubicacion: v.ubicacion ?? '',
+                    fecha: v.fecha ?? '',
+                    infoAuto: v.infoAuto ?? '',
                 }));
                 setVehiculos(formatted);
             } else {
