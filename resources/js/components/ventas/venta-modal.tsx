@@ -9,41 +9,36 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-interface AddVehiculoModalProps {
-    onVehiculoCreado: (veh: Venta) => void;
+interface AddVentaModalProps {
+    onVentaCreada: (venta: Venta) => void;
 }
 
-export default function AddVentaModal() {
+export default function AddVentaModal({ onVentaCreada }: AddVentaModalProps) {
     const [open, setOpen] = useState(false);
 
     const form = useForm<Venta>({
         defaultValues: {
-            vehicle_id: 0,
+            dniCliente: '',
+            dominio: '',
             procedencia: '',
             valor_venta_ars: 0,
             valor_venta_usd: 0,
-            ganancia_real_ars: 0,
-            ganancia_real_usd: 0,
             fecha_venta: '',
             vendedor: '',
         },
-            
     });
 
     const onSubmit = async (data: Venta) => {
         const payload = {
             ...data,
-            vehicle_id: Number(data.vehicle_id) || null,
+            dominio: data.dominio.toUpperCase() || null,
             valor_venta_ars: Number(data.valor_venta_ars) || 0,
             valor_venta_usd: Number(data.valor_venta_usd) || 0,
-            ganancia_real_ars: Number(data.ganancia_real_ars) || 0,
-            ganancia_real_usd: Number(data.ganancia_real_usd) || 0,
             fecha_venta: data.fecha_venta || null,
             vendedor: data.vendedor || '',
         };
 
         try {
-
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const response = await fetch('/ventas', {
                 method: 'POST',
@@ -54,26 +49,38 @@ export default function AddVentaModal() {
                 },
                 body: JSON.stringify(payload),
             });
+            console.log('Response status:', response.status);
             console.log(payload);
             const result = await response.json();
+
             if (result.success) {
-                // Mapear correctamente los datos antes de pasarlos al padre
                 const nuevaVenta: Venta = {
-                    vehicle_id: result.venta.vehicle_id,
+                    dniCliente: result.venta.dniCliente,
+                    dominio: result.venta.dominio,
                     procedencia: result.venta.procedencia,
                     valor_venta_ars: Number(result.venta.valor_venta_ars),
                     valor_venta_usd: Number(result.venta.valor_venta_usd),
-                    ganancia_real_ars: Number(result.venta.ganancia_real_ars),
-                    ganancia_real_usd: Number(result.venta.ganancia_real_usd),
                     fecha_venta: result.venta.fecha_venta,
                     vendedor: result.venta.vendedor,
                 };
 
+                onVentaCreada(nuevaVenta);
                 setOpen(false);
                 toast.success('Venta registrada correctamente');
+                form.reset();
             } else {
-                console.error('Errores de validación:', result.errors);
-                toast.error('Error al registrar venta: ' + (result.message || ''));
+                // Si el backend devuelve errores específicos
+                if (result.errors) {
+                    if (result.errors.dniCliente) {
+                        toast.error('Cliente no registrado');
+                    } else if (result.errors.dominio) {
+                        toast.error('Vehículo no registrado');
+                    } else {
+                        toast.error('Error al registrar venta');
+                    }
+                } else {
+                    toast.error('Error al registrar venta: ' + (result.message || ''));
+                }
             }
         } catch (error) {
             console.error('Error fetch:', error);
@@ -86,24 +93,23 @@ export default function AddVentaModal() {
             <DialogTrigger asChild>
                 <Button>
                     <IconPlus className="size-4" />
-                    Registrar venta
+                    Registrar Venta
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Registrar venta</DialogTitle>
+                    <DialogTitle>Ingrese los datos de la venta</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
                         {[
-                            { name: 'vehicle_id', label: 'ID del vehículo', type: 'number' },
-                            { name: 'procedencia', label: 'Procedencia' },
-                            { name: 'valor_venta_ars', label: 'Valor de venta (ARS)', type: 'number' },
-                            { name: 'valor_venta_usd', label: 'Valor de venta (USD)', type: 'number' },
-                            { name: 'ganancia_real_ars', label: 'Ganancia real (ARS)', type: 'number' },
-                            { name: 'ganancia_real_usd', label: 'Ganancia real (USD)', type: 'number' },
-                            { name: 'fecha_venta', label: 'Fecha de venta', type: 'date' },
-                            { name: 'vendedor', label: 'Vendedor' },    
+                            { name: 'dniCliente', label: 'DNI del Cliente', required: true },
+                            { name: 'dominio', label: 'Dominio', required: true },
+                            { name: 'procedencia', label: 'Procedencia', required: true },
+                            { name: 'valor_venta_ars', label: 'Valor de Venta (ARS)', type: 'number', required: true },
+                            { name: 'valor_venta_usd', label: 'Valor de Venta (USD)', type: 'number', required: true },
+                            { name: 'fecha_venta', label: 'Fecha de Venta', type: 'date', required: true },
+                            { name: 'vendedor', label: 'Vendedor', required: true },
                         ].map((field) => (
                             <FormField
                                 key={field.name}
@@ -113,7 +119,7 @@ export default function AddVentaModal() {
                                     <FormItem>
                                         <FormLabel>{field.label}</FormLabel>
                                         <FormControl>
-                                            <Input {...hookField} type={field.type ?? 'text'} />
+                                            <Input {...hookField} type={field.type ?? 'text'} required={field.required} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

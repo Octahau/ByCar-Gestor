@@ -1,34 +1,30 @@
 'use client';
 import FiltrosModal from '@/components/vehicles/modal-filtros';
-import AddVentaModal from '@/components/ventas/venta-modal';
+import AddClienteModal from '@/components/cliente/cliente-modal';
 import AppLayout from '@/layouts/app-layout';
-import { Venta, VentaTable } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import type { Cliente } from '@/types';
+import { Head } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
-import { DataTable }  from '@/components/ventas/data-table';
-export default function Ventas() {
+export default function Cliente() {
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-    const handleVentaCreada = (venta: Venta) => {
-        console.log('Venta registrada:', venta);
+    const handleClienteCreado = (cliente: Cliente) => {
+        console.log('Cliente registrado:', cliente);
         setMostrarFormulario(false); // ocultar el formulario después de registrar
     };
 
-    const { props } = usePage<{ ventas: VentaTable[] }>();
-    const [ventas, setVentas] = useState<VentaTable[]>(props.ventas);
-    console.log(ventas);
     return (
-        <AppLayout breadcrumbs={[{ title: 'Ventas', href: '/ventas' }]}>
-            <Head title="Ventas" />
+        <AppLayout breadcrumbs={[{ title: 'Clientes', href: '/clientes' }]}>
+            <Head title="Clientes" />
             <div className="p-4">
-                <h1 className="mb-4 text-xl font-bold">Ventas realizadas</h1>
+                <h1 className="mb-4 text-xl font-bold">Clientes Registrados</h1>
 
                 {/* Botones y buscador */}
                 <div className="mb-4 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
                     {/* Izquierda: botones */}
                     <div className="flex gap-2">
-                        <AddVentaModal onVentaCreada={handleVentaCreada} />
+                        <AddClienteModal onClienteCreado={handleClienteCreado} />
                     </div>
 
                     <div className="mt-2 flex items-center gap-2 lg:mt-0">
@@ -39,7 +35,8 @@ export default function Ventas() {
                         </div>
                     </div>
                 </div>
-                <DataTable data={ventas} />
+
+                {/* <DataTable data={null} /> */}
             </div>
         </AppLayout>
     );

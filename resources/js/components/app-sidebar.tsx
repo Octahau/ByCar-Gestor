@@ -11,6 +11,7 @@ import {
     IconReport,
     IconSearch,
     IconSettings,
+    IconUser,
 } from '@tabler/icons-react';
 import * as React from 'react';
 
@@ -41,6 +42,12 @@ const data = {
             title: 'Ventas',
             href: '/ventas',
             icon: IconChartBar, // gráfico de ventas
+        },
+        
+        {
+            title: 'Clientes',
+            href: '/clientes',
+            icon: IconUser, // documentos / gastos generales
         },
         {
             title: 'Gastos corrientes',

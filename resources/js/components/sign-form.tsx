@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -22,21 +22,43 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-  console.log("Datos que se envían al backend:", form);
+        console.log('Datos que se envían al backend:', form);
 
         try {
-            const res = await fetch('/register', {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            const res = await fetch('/registro', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                    Accept: 'application/json',
+                },
                 body: JSON.stringify(form),
             });
 
             const data = await res.json();
+            console.log('Respuesta del backend:', data);
 
-            if (!res.ok) throw new Error(data.message || 'Error en el registro');
+            if (!res.ok) {
+                // Manejo de errores de validación (422)
+                if (data.errors) {
+                    throw new Error(Object.values(data.errors).flat().join(', '));
+                }
+                throw new Error(data.message || 'Error en el registro');
+            }
+
+            if (!data.success) {
+                throw new Error(data.error || 'Error en el registro');
+            }
 
             alert('Usuario registrado con éxito');
             console.log('Usuario:', data.user);
+
+            // Redirigir si el backend envía la ruta
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
         } catch (error: any) {
             console.error('Error:', error.message);
             alert(error.message);

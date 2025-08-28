@@ -13,6 +13,8 @@ class Venta extends Model
     protected $primaryKey = 'venta_id';
 
     protected $fillable = [
+        'cliente_id',
+        'vendedor_id',
         'vehicle_id',
         'procedencia',
         'valor_venta_ars',
@@ -30,6 +32,6 @@ class Venta extends Model
     // Relación: una venta pertenece a un vehículo
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculo::class);
+        return $this->belongsTo(Vehiculo::class, 'vehicle_id', 'vehicle_id');
     }
 }

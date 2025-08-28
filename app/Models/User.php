@@ -35,9 +35,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    protected $casts = [
-        'tipo' => UserType::class,
-    ];
+    // protected $casts = [
+    //     'tipo' => UserType::class,
+    // ];
     /**
      * Get the attributes that should be cast.
      *

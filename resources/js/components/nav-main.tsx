@@ -7,8 +7,8 @@ export function NavMain({
 }: {
     items: {
         title: string;
-        url: string;
-        icon?: Icon;
+        href: any;
+        icon?: any;
     }[];
 }) {
     return (

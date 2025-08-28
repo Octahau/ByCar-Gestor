@@ -36,6 +36,7 @@ export default function AddVehiculoModal({ onVehiculoCreado }: AddVehiculoModalP
     const onSubmit = async (data: Vehiculo) => {
         const payload = {
             ...data,
+            dominio: data.dominio.toUpperCase() || '',
             anio: Number(data.anio) || null,
             kilometraje: Number(data.kilometraje) || 0,
             precioARS: Number(data.precioARS) || 0,

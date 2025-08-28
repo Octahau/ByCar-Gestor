@@ -39,6 +39,7 @@ import {
 } from '@tanstack/react-table';
 import * as React from 'react';
 import { z } from 'zod';
+import { format, parseISO } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
 import { ChartConfig } from '@/components/ui/chart';
@@ -65,9 +66,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Badge } from '../ui/badge';
 
 export const schema = z.object({
     id: z.number(),
@@ -80,6 +80,8 @@ export const schema = z.object({
     precioARS: z.number().optional(),
     precioUSD: z.number().optional(),
     ubicacion: z.string().optional(),
+    fecha: z.string().optional(),
+    estado: z.string().optional(),
 });
 
 // Create a separate component for the drag handle
@@ -131,6 +133,24 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     { accessorKey: 'precioUSD', header: 'Precio USD' },
     { accessorKey: 'ubicacion', header: 'Ubicación' },
     {
+        accessorKey: 'fecha',
+        header: 'Fecha adquisición',
+        cell: ({ getValue }) => {
+            const fechaRaw = getValue<string>();
+            if (!fechaRaw) return '-';
+
+            try {
+                // Intentamos parsear como ISO y formatear a dd/MM/yyyy
+                const parsed = parseISO(fechaRaw);
+                return format(parsed, 'dd/MM/yyyy');
+            } catch {
+                // Si no es ISO, lo mostramos tal cual
+                return fechaRaw;
+            }
+        },
+    },
+    { accessorKey: 'estado', header: 'Estado' },
+    {
         id: 'actions',
         cell: () => (
             <DropdownMenu>
@@ -141,7 +161,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem>Editar</DropdownMenuItem>
+                    <DropdownMenuItem>Informacion</DropdownMenuItem>
                     <DropdownMenuItem>Marcar como favorito</DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
@@ -500,6 +520,15 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
                                     <Label htmlFor={`ubicacion-${item.id}`}>Ubicacion</Label>
                                     <Input id={`ubicacion-${item.id}`} defaultValue={item.ubicacion} />
                                 </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor={`fecha-${item.id}`}>Fecha adquisicion</Label>
+                                    <Input id={`fecha-${item.id}`} defaultValue={item.fecha} />
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <Label htmlFor={`estado-${item.id}`}>Estado</Label>
+                                    <Input id={`estado-${item.id}`} defaultValue={item.estado} />
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -514,3 +543,4 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
         );
     }
 }
+

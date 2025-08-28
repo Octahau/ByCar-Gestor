@@ -4,7 +4,12 @@ import type { Config } from 'ziggy-js';
 export interface Auth {
     user: User;
 }
-
+export interface NavItem {
+    title: string;
+    href: NonNullable<InertiaLinkProps['href']>;
+    icon?: LucideIcon | null;
+    isActive?: boolean;
+}
 export interface BreadcrumbItem {
     title: string;
     href: string;

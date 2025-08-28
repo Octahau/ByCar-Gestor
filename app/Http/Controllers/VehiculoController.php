@@ -7,6 +7,7 @@ use App\Models\Vehiculo;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use \Illuminate\Database\QueryException;
 
 class VehiculoController extends Controller
 {
@@ -69,7 +70,7 @@ class VehiculoController extends Controller
                     'estado' => $vehiculo->estado,
                 ]
             ]);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             logger('Error DB: ', ['message' => $e->getMessage()]);
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         } catch (\Exception $e) {
@@ -83,34 +84,28 @@ class VehiculoController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->wantsJson()) {
-            $vehiculos = Vehiculo::all();
+        $vehiculos = Vehiculo::all();
 
-            $formatted = $vehiculos->map(function ($v) {
-                return [
-                    'id' => $v->vehicle_id, 
-                    'marca' => $v->marca,
-                    'modelo' => $v->modelo,
-                    'dominio' => $v->dominio,
-                    'anio' => (int) $v->anio,
-                    'color' => $v->color,
-                    'kilometraje' => (int) $v->kilometraje,
-                    'precioARS' => (int) $v->precioARS,
-                    'precioUSD' => (int) $v->precioUSD,
-                    'ubicacion' => $v->ubicacion,
-                    'fecha' => $v->fecha,
-                    'infoAuto' => $v->infoAuto,
-                    'estado' => $v->estado,
-                ];
-            });
+        $formatted = $vehiculos->map(function ($v) {
+            return [
+                'id' => $v->vehicle_id, // asegurate que la columna se llama "id" en la tabla
+                'marca' => $v->marca,
+                'modelo' => $v->modelo,
+                'dominio' => $v->dominio,
+                'anio' => (int) $v->anio,
+                'color' => $v->color,
+                'kilometraje' => (int) $v->kilometraje,
+                'precioARS' => (int) $v->precioARS,
+                'precioUSD' => (int) $v->precioUSD,
+                'ubicacion' => $v->ubicacion,
+                'fecha' => $v->fecha,
+                'infoAuto' => $v->infoAuto,
+                'estado' => $v->estado,
+            ];
+        });
 
-            return response()->json([
-                'success' => true,
-                'vehiculos' => $formatted,
-            ]);
-        }
-
-        // si no pide JSON, devolver vista Inertia normal
-        return Inertia::render('Vehiculos');
+        return Inertia::render('vehiculos', [
+            'vehiculos' => $formatted,
+        ]);
     }
 }
