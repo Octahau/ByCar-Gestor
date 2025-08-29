@@ -116,19 +116,9 @@ const data = {
     ],
     navSecondary: [
         {
-            title: 'Settings',
-            url: '#',
-            icon: IconSettings,
-        },
-        {
-            title: 'Get Help',
+            title: 'Ayuda',
             url: '#',
             icon: IconHelp,
-        },
-        {
-            title: 'Search',
-            url: '#',
-            icon: IconSearch,
         },
     ],
 };
@@ -167,7 +157,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser/>
             </SidebarFooter>
         </Sidebar>
     );

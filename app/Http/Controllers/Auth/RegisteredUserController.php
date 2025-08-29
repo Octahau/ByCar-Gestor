@@ -11,21 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
-use App\Enums\UserType;
-use Illuminate\Http\JsonResponse;
-use \Illuminate\Database\QueryException;
-use Symfony\Component\HttpFoundation\Response;
-use Inertia\Response as InertiaResponse;
-
+use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
     /**
      * Show the registration page.
      */
-    public function create(): InertiaResponse
+    public function create(): Response
     {
-        return Inertia::render('registro');
+        return Inertia::render('auth/register');
     }
 
     /**
@@ -33,41 +28,26 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request): RedirectResponse
     {
-        try {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'dni' => 'required|string|max:20|unique:'.User::class,
+        ]);
 
-            $validated = $request->validate([
-                'nombre' => 'required|string|max:255',
-                'apellido' => 'required|string|max:255',
-                'dni' => 'required|string|max:20|unique:users,dni',
-                'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'dni' => $request->dni,
+        ]);
 
-            $user = User::create([
-                'name' => $validated['nombre'] . ' ' . $validated['apellido'],
-                'dni' => $validated['dni'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-                'tipo' =>  'Empleado',
-            ]);
+        event(new Registered($user));
 
-            event(new Registered($user));
+        Auth::login($user);
 
-            Auth::login($user);
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'user' => $user,
-                    'redirect' => route('dashboard'),
-                ]);
-            }
-
-            return redirect()->intended(route('dashboard'));
-        } catch (QueryException $e) {
-            logger('Error DB: ', ['message' => $e->getMessage()]);
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
-        }
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }
