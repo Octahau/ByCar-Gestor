@@ -12,7 +12,7 @@ return new class extends Migration
    public function up(): void
     {
         Schema::create('vehiculos', function (Blueprint $table) {
-            $table->id('vehicle_id'); // Clave primaria personalizada
+            $table->id('vehiculo_id'); // Clave primaria personalizada
             $table->string('marca')->nullable();
             $table->string('modelo')->nullable();
             $table->string('dominio')->unique(); // dominio único

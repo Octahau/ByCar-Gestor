@@ -12,7 +12,7 @@ class Vehiculo extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'vehicle_id';
+    protected $primaryKey = 'vehiculo_id';
     // app/Models/Vehiculo.php
     protected $fillable = ['marca', 'modelo', 'dominio', 'anio', 'color', 'kilometraje', 'precioARS', 'precioUSD', 'ubicacion' , 'estado', 'infoAuto', 'fecha'];
 

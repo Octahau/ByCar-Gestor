@@ -2,14 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
-
+use App\Models\Cliente;
 class ClienteController extends Controller
 {
     public function index()
     {
-        return inertia('clientes'); // resources/js/Pages/clientes.tsx
-    }
+        $clientes = Cliente::all();
+
+        $formatted = $clientes->map(function ($v) {
+            return [
+                'id' => $v->cliente_id,
+                'nombre' => $v->nombre ?? '',
+                'dni' => $v->dni ?? '',
+                'email' => $v->email ?? '',
+                'telefono' => $v->telefono ?? '',
+            ];
+        });
+
+        return Inertia::render('clientes', [
+            'clientes' => $formatted,
+        ]);    }
 
     public function store(Request $request)
     {
@@ -20,7 +34,7 @@ class ClienteController extends Controller
             'telefono' => 'nullable|string|max:20',
         ]);
 
-        $cliente = \App\Models\Cliente::create($validatedData);
+        $cliente = Cliente::create($validatedData);
 
         return response()->json([
             'success' => true,

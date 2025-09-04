@@ -66,21 +66,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Badge } from '@/components/ui/badge';
 
 export const schema = z.object({
-    id: z.number(),
-    marca: z.string().optional(),
-    modelo: z.string().optional(),
-    dominio: z.string().optional(),
-    procedencia: z.string().optional(),
-    valor_venta_ars: z.number().optional(),
-    valor_venta_usd: z.number().optional(),
-    ganancia_real_ars: z.number().optional(),
-    ganancia_real_usd: z.number().optional(),
-    fecha: z.string().optional(),
-    vendedor: z.string().optional(),
+    id: z.number().int(),
+    operador: z.string(),
+    tipo_gasto: z.string().nullable(),
+    descripcion: z.string().nullable(),
+    importe_usd: z.number().nullable(),
+    importe_ars: z.number().nullable(),
+    dominio: z.string().nullable(),
+    fecha: z.string().nullable(),
 });
 // Create a separate component for the drag handle
 function DragHandle({ id }: { id: number }) {
@@ -121,18 +119,15 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         enableSorting: false,
         enableHiding: false,
     },
-    { accessorKey: 'marca', header: 'Marca', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'modelo', header: 'Modelo', cell: ({ getValue }) => getValue<string>() || '-' },
+    { accessorKey: 'operador', header: 'Operador', cell: ({ getValue }) => getValue<string>() || '-' },
+    { accessorKey: 'tipo_gasto', header: 'Motivo', cell: ({ getValue }) => getValue<string>() || '-' },
+    { accessorKey: 'descripcion', header: 'Descripcion', cell: ({ getValue }) => getValue<string>() || '-' },
+    { accessorKey: 'importe_ars', header: 'Importe (ARS)', cell: ({ getValue }) => getValue<number>() ?? '-' },
+    { accessorKey: 'importe_usd', header: 'Importe (USD)', cell: ({ getValue }) => getValue<number>() ?? '-' },
     { accessorKey: 'dominio', header: 'Dominio', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'procedencia', header: 'Procedencia', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'valor_venta_ars', header: 'Valor venta ARS', cell: ({ getValue }) => getValue<number>()?.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || '-' },
-    { accessorKey: 'valor_venta_usd', header: 'Valor venta USD', cell: ({ getValue }) => getValue<number>()?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) || '-' },
-    { accessorKey: 'ganancia_real_ars', header: 'Ganancia ARS', cell: ({ getValue }) => getValue<number>()?.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || '-' },
-    { accessorKey: 'ganancia_real_usd', header: 'Ganancia USD', cell: ({ getValue }) => getValue<number>()?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) || '-' },
-    { accessorKey: 'vendedor', header: 'Vendedor', cell: ({ getValue }) => getValue<string>() || '-' },
     {
         accessorKey: 'fecha',
-        header: 'Fecha venta',
+        header: 'Fecha gasto',
         cell: ({ getValue }) => {
             const fechaRaw = getValue<string>();
             if (!fechaRaw) return '-';
@@ -159,7 +154,6 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-32">
                     <DropdownMenuItem>Informacion</DropdownMenuItem>
-                    <DropdownMenuItem>Marcar como favorito</DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
                 </DropdownMenuContent>
@@ -250,30 +244,6 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
     return (
         <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
             <div className="flex items-center justify-between px-4 lg:px-6">
-                <Label htmlFor="view-selector" className="sr-only">
-                    View
-                </Label>
-                {/* <Select defaultValue="outline">
-                    <SelectTrigger className="flex w-fit @4xl/main:hidden" size="sm" id="view-selector">
-                        <SelectValue placeholder="Select a view" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="outline">Outline</SelectItem>
-                        <SelectItem value="past-performance">Past Performance</SelectItem>
-                        <SelectItem value="key-personnel">Key Personnel</SelectItem>
-                        <SelectItem value="focus-documents">Focus Documents</SelectItem>
-                    </SelectContent>
-                </Select>
-                <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
-                    <TabsTrigger value="outline">Outline</TabsTrigger>
-                    <TabsTrigger value="past-performance">
-                        Past Performance <Badge variant="secondary">3</Badge>
-                    </TabsTrigger>
-                    <TabsTrigger value="key-personnel">
-                        Key Personnel <Badge variant="secondary">2</Badge>
-                    </TabsTrigger>
-                    <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
-                </TabsList> */}
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -465,15 +435,15 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
         return (
             <Drawer direction={isMobile ? 'bottom' : 'right'}>
                 <DrawerTrigger asChild>
-                    <Button variant="link" className="w-fit px-0 text-left text-foreground">
-                        {item.marca} {item.modelo}
-                    </Button>
+                    {/* <Button variant="link" className="w-fit px-0 text-left text-foreground">
+                        {item.} {item.modelo}
+                    </Button> */}
                 </DrawerTrigger>
 
                 <DrawerContent>
                     <DrawerHeader className="gap-1">
                         <DrawerTitle>
-                            {item.marca} {item.modelo}
+                            Gastos corrientes
                         </DrawerTitle>
                         <DrawerDescription>Detalles de la venta</DrawerDescription>
                     </DrawerHeader>
@@ -482,46 +452,34 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
                         <form className="flex flex-col gap-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`marca-${item.id}`}>Marca</Label>
-                                    <Input id={`marca-${item.id}`} defaultValue={item.marca} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`modelo-${item.id}`}>Modelo</Label>
-                                    <Input id={`modelo-${item.id}`} defaultValue={item.modelo} />
-                                </div>
-                                <div className="flex flex-col gap-2">
                                     <Label htmlFor={`dominio-${item.id}`}>Dominio</Label>
-                                    <Input id={`dominio-${item.id}`} defaultValue={item.dominio} />
+                                    <Input id={`dominio-${item.id}`} defaultValue={item.dominio ?? ''} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`procedencia-${item.id}`}>Procedencia</Label>
-                                    <Input id={`procedencia-${item.id}`} defaultValue={item.procedencia} />
+                                    <Label htmlFor={`operador-${item.id}`}>Operador</Label>
+                                    <Input id={`operador-${item.id}`} defaultValue={item.operador} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`valor_venta_ars-${item.id}`}>Valor Venta ARS</Label>
-                                    <Input id={`valor_venta_ars-${item.id}`} defaultValue={item.valor_venta_ars} />
+                                    <Label htmlFor={`tipo_gasto-${item.id}`}>Motivo</Label>
+                                    <Input id={`tipo_gasto-${item.id}`} defaultValue={item.tipo_gasto ?? ''} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`valor_venta_usd-${item.id}`}>Valor Venta USD</Label>
-                                    <Input id={`valor_venta_usd-${item.id}`} defaultValue={item.valor_venta_usd} />
+                                    <Label htmlFor={`descripcion-${item.id}`}>Descripcion</Label>
+                                    <Input id={`descripcion-${item.id}`} defaultValue={item.descripcion ?? ''} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`ganancia_real_ars-${item.id}`}>Ganancia ARS</Label>
-                                    <Input id={`ganancia_real_ars-${item.id}`} defaultValue={item.ganancia_real_ars} />
+                                    <Label htmlFor={`importe_ars-${item.id}`}>Importe ARS</Label>
+                                    <Input id={`importe_ars-${item.id}`} defaultValue={item.importe_ars ?? ''} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`ganancia_real_usd-${item.id}`}>Ganancia USD</Label>
-                                    <Input id={`ganancia_real_usd-${item.id}`} defaultValue={item.ganancia_real_usd} />
+                                    <Label htmlFor={`importe_usd-${item.id}`}>Importe USD</Label>
+                                    <Input id={`importe_usd-${item.id}`} defaultValue={item.importe_usd ?? ''} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`fecha-${item.id}`}>Fecha</Label>
-                                    <Input id={`fecha-${item.id}`} defaultValue={item.fecha} />
+                                    <Label htmlFor={`fecha-${item.id}`}>Fecha gasto</Label>
+                                    <Input id={`fecha-${item.id}`} defaultValue={item.fecha ?? ''} />
                                 </div>
 
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`vendedor-${item.id}`}>Vendedor</Label>
-                                    <Input id={`vendedor-${item.id}`} defaultValue={item.vendedor} />
-                                </div>
                             </div>
                         </form>
                     </div>

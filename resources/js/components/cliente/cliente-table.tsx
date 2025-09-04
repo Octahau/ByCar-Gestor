@@ -37,7 +37,6 @@ import {
     useReactTable,
     VisibilityState,
 } from '@tanstack/react-table';
-import { format, parseISO } from 'date-fns';
 import * as React from 'react';
 import { z } from 'zod';
 
@@ -71,17 +70,12 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 export const schema = z.object({
     id: z.number(),
-    marca: z.string().optional(),
-    modelo: z.string().optional(),
-    dominio: z.string().optional(),
-    procedencia: z.string().optional(),
-    valor_venta_ars: z.number().optional(),
-    valor_venta_usd: z.number().optional(),
-    ganancia_real_ars: z.number().optional(),
-    ganancia_real_usd: z.number().optional(),
-    fecha: z.string().optional(),
-    vendedor: z.string().optional(),
+    nombre: z.string().optional(),
+    dni: z.string().optional(),
+    telefono: z.string().optional(),
+    email: z.string().optional(),
 });
+
 // Create a separate component for the drag handle
 function DragHandle({ id }: { id: number }) {
     const { attributes, listeners } = useSortable({
@@ -91,7 +85,7 @@ function DragHandle({ id }: { id: number }) {
     return (
         <Button {...attributes} {...listeners} variant="ghost" size="icon" className="size-7 text-muted-foreground hover:bg-transparent">
             <IconGripVertical className="size-3 text-muted-foreground" />
-            <span className="sr-only">Reordenar</span>
+            <span className="sr-only">Drag to reorder</span>
         </Button>
     );
 }
@@ -121,32 +115,10 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         enableSorting: false,
         enableHiding: false,
     },
-    { accessorKey: 'marca', header: 'Marca', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'modelo', header: 'Modelo', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'dominio', header: 'Dominio', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'procedencia', header: 'Procedencia', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'valor_venta_ars', header: 'Valor venta ARS', cell: ({ getValue }) => getValue<number>()?.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || '-' },
-    { accessorKey: 'valor_venta_usd', header: 'Valor venta USD', cell: ({ getValue }) => getValue<number>()?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) || '-' },
-    { accessorKey: 'ganancia_real_ars', header: 'Ganancia ARS', cell: ({ getValue }) => getValue<number>()?.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' }) || '-' },
-    { accessorKey: 'ganancia_real_usd', header: 'Ganancia USD', cell: ({ getValue }) => getValue<number>()?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) || '-' },
-    { accessorKey: 'vendedor', header: 'Vendedor', cell: ({ getValue }) => getValue<string>() || '-' },
-    {
-        accessorKey: 'fecha',
-        header: 'Fecha venta',
-        cell: ({ getValue }) => {
-            const fechaRaw = getValue<string>();
-            if (!fechaRaw) return '-';
-
-            try {
-                // Intentamos parsear como ISO y formatear a dd/MM/yyyy
-                const parsed = parseISO(fechaRaw);
-                return format(parsed, 'dd/MM/yyyy');
-            } catch {
-                // Si no es ISO, lo mostramos tal cual
-                return fechaRaw;
-            }
-        },
-    },
+    { accessorKey: 'nombre', header: 'Nombre' },
+    { accessorKey: 'dni', header: 'DNI' },
+    { accessorKey: 'telefono', header: 'Telefono' },
+    { accessorKey: 'email', header: 'Email' },
     {
         id: 'actions',
         cell: () => (
@@ -466,61 +438,36 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
             <Drawer direction={isMobile ? 'bottom' : 'right'}>
                 <DrawerTrigger asChild>
                     <Button variant="link" className="w-fit px-0 text-left text-foreground">
-                        {item.marca} {item.modelo}
+                        {item.nombre} {item.dni}
                     </Button>
                 </DrawerTrigger>
 
                 <DrawerContent>
                     <DrawerHeader className="gap-1">
                         <DrawerTitle>
-                            {item.marca} {item.modelo}
+                            {item.nombre} {item.dni}
                         </DrawerTitle>
-                        <DrawerDescription>Detalles de la venta</DrawerDescription>
+                        <DrawerDescription>Detalles del cliente seleccionado</DrawerDescription>
                     </DrawerHeader>
 
                     <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
                         <form className="flex flex-col gap-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`marca-${item.id}`}>Marca</Label>
-                                    <Input id={`marca-${item.id}`} defaultValue={item.marca} />
+                                    <Label htmlFor={`nombre-${item.id}`}>Nombre</Label>
+                                    <Input id={`nombre-${item.id}`} defaultValue={item.nombre} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`modelo-${item.id}`}>Modelo</Label>
-                                    <Input id={`modelo-${item.id}`} defaultValue={item.modelo} />
+                                    <Label htmlFor={`dni-${item.id}`}>DNI</Label>
+                                    <Input id={`dni-${item.id}`} defaultValue={item.dni} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`dominio-${item.id}`}>Dominio</Label>
-                                    <Input id={`dominio-${item.id}`} defaultValue={item.dominio} />
+                                    <Label htmlFor={`telefono-${item.id}`}>Telefono</Label>
+                                    <Input id={`telefono-${item.id}`} defaultValue={item.telefono} />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`procedencia-${item.id}`}>Procedencia</Label>
-                                    <Input id={`procedencia-${item.id}`} defaultValue={item.procedencia} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`valor_venta_ars-${item.id}`}>Valor Venta ARS</Label>
-                                    <Input id={`valor_venta_ars-${item.id}`} defaultValue={item.valor_venta_ars} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`valor_venta_usd-${item.id}`}>Valor Venta USD</Label>
-                                    <Input id={`valor_venta_usd-${item.id}`} defaultValue={item.valor_venta_usd} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`ganancia_real_ars-${item.id}`}>Ganancia ARS</Label>
-                                    <Input id={`ganancia_real_ars-${item.id}`} defaultValue={item.ganancia_real_ars} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`ganancia_real_usd-${item.id}`}>Ganancia USD</Label>
-                                    <Input id={`ganancia_real_usd-${item.id}`} defaultValue={item.ganancia_real_usd} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`fecha-${item.id}`}>Fecha</Label>
-                                    <Input id={`fecha-${item.id}`} defaultValue={item.fecha} />
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`vendedor-${item.id}`}>Vendedor</Label>
-                                    <Input id={`vendedor-${item.id}`} defaultValue={item.vendedor} />
+                                    <Label htmlFor={`email-${item.id}`}>Email</Label>
+                                    <Input id={`email-${item.id}`} defaultValue={item.email} />
                                 </div>
                             </div>
                         </form>

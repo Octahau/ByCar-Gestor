@@ -1,0 +1,2784 @@
+{
+	"knownSymbols": {
+		"defineConfig": [
+			{
+				"name": "defineConfig",
+				"module": "vite",
+				"isDefault": false
+			},
+			{
+				"name": "defineConfig",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\vite.config.ts",
+				"isDefault": true
+			}
+		],
+		"tailwindcss": [
+			{
+				"name": "tailwindcss",
+				"module": "@tailwindcss/vite",
+				"isDefault": true
+			}
+		],
+		"react": [
+			{
+				"name": "react",
+				"module": "@vitejs/plugin-react",
+				"isDefault": true
+			}
+		],
+		"laravel": [
+			{
+				"name": "laravel",
+				"module": "laravel-vite-plugin",
+				"isDefault": true
+			}
+		],
+		"resolve": [
+			{
+				"name": "resolve",
+				"module": "node:path",
+				"isDefault": false
+			}
+		],
+		"RouteList": [
+			{
+				"name": "RouteList",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\vendor\\tightenco\\ziggy\\src\\js\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"TypeConfig": [
+			{
+				"name": "TypeConfig",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\vendor\\tightenco\\ziggy\\src\\js\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"route": [
+			{
+				"name": "route",
+				"module": "ziggy-js",
+				"isDefault": false
+			},
+			{
+				"name": "route",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\vendor\\tightenco\\ziggy\\src\\js\\index.d.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"ZiggyVue": [
+			{
+				"name": "ZiggyVue",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\vendor\\tightenco\\ziggy\\src\\js\\index.d.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"useRoute": [
+			{
+				"name": "useRoute",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\vendor\\tightenco\\ziggy\\src\\js\\index.d.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Welcome": [
+			{
+				"name": "Welcome",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\welcome.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Head": [
+			{
+				"name": "Head",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"Ventas": [
+			{
+				"name": "Ventas",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\ventas.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"FiltrosModal": [
+			{
+				"name": "FiltrosModal",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\vehicles\\modal-filtros.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "FiltrosModal",
+				"module": "@/components/vehicles/modal-filtros",
+				"isDefault": true
+			}
+		],
+		"AddVentaModal": [
+			{
+				"name": "AddVentaModal",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\ventas\\venta-modal.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "AddVentaModal",
+				"module": "@/components/ventas/venta-modal",
+				"isDefault": true
+			}
+		],
+		"AppLayout": [
+			{
+				"name": "AppLayout",
+				"module": "@/layouts/app-layout",
+				"isDefault": true
+			}
+		],
+		"Venta": [
+			{
+				"name": "Venta",
+				"module": "@/types",
+				"isDefault": false
+			},
+			{
+				"name": "Venta",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"VentaTable": [
+			{
+				"name": "VentaTable",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.ts",
+				"type": "type",
+				"isDefault": false
+			},
+			{
+				"name": "VentaTable",
+				"module": "@/types",
+				"isDefault": false
+			}
+		],
+		"usePage": [
+			{
+				"name": "usePage",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"Search": [
+			{
+				"name": "Search",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"useState": [
+			{
+				"name": "useState",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"DataTable": [
+			{
+				"name": "DataTable",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\vehicles\\data-table.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "DataTable",
+				"module": "@/components/vehicles/data-table",
+				"isDefault": false
+			},
+			{
+				"name": "DataTable",
+				"module": "@/components/ventas/data-table",
+				"isDefault": false
+			}
+		],
+		"Vehiculos": [
+			{
+				"name": "Vehiculos",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\vehiculos.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AddVehiculoModal": [
+			{
+				"name": "AddVehiculoModal",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\vehicles\\modal-vehicle.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "AddVehiculoModal",
+				"module": "@/components/vehicles/modal-vehicle",
+				"isDefault": true
+			}
+		],
+		"Vehiculo": [
+			{
+				"name": "Vehiculo",
+				"module": "@/types",
+				"isDefault": false
+			},
+			{
+				"name": "Vehiculo",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"Page": [
+			{
+				"name": "Page",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\dashboard.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AppSidebar": [
+			{
+				"name": "AppSidebar",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-sidebar.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "AppSidebar",
+				"module": "@/components/app-sidebar",
+				"isDefault": false
+			}
+		],
+		"ChartAreaInteractive": [
+			{
+				"name": "ChartAreaInteractive",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\chart-area-interactive.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "ChartAreaInteractive",
+				"module": "@/components/chart-area-interactive",
+				"isDefault": false
+			}
+		],
+		"SectionCards": [
+			{
+				"name": "SectionCards",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\section-cards.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "SectionCards",
+				"module": "@/components/section-cards",
+				"isDefault": false
+			}
+		],
+		"SiteHeader": [
+			{
+				"name": "SiteHeader",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\site-header.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "SiteHeader",
+				"module": "@/components/site-header",
+				"isDefault": false
+			}
+		],
+		"SidebarInset": [
+			{
+				"name": "SidebarInset",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarProvider": [
+			{
+				"name": "SidebarProvider",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"Cliente": [
+			{
+				"name": "Cliente",
+				"module": "@/types",
+				"isDefault": false
+			},
+			{
+				"name": "Cliente",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.ts",
+				"type": "type",
+				"isDefault": true
+			}
+		],
+		"AddClienteModal": [
+			{
+				"name": "AddClienteModal",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\cliente\\cliente-modal.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "AddClienteModal",
+				"module": "@/components/cliente/cliente-modal",
+				"isDefault": true
+			}
+		],
+		"type { Cliente": [
+			{
+				"name": "type { Cliente",
+				"module": "@/types",
+				"isDefault": true
+			}
+		],
+		"Profile": [
+			{
+				"name": "Profile",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\settings\\profile.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"update": [
+			{
+				"name": "update",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Settings\\PasswordController.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "update",
+				"module": "@/actions/App/Http/Controllers/Settings/ProfileController",
+				"isDefault": false
+			}
+		],
+		"send": [
+			{
+				"name": "send",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\verification\\index.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "send",
+				"module": "@/routes/verification",
+				"isDefault": false
+			}
+		],
+		"type BreadcrumbItem": [
+			{
+				"name": "type BreadcrumbItem",
+				"module": "@/types",
+				"isDefault": false
+			}
+		],
+		"type SharedData": [
+			{
+				"name": "type SharedData",
+				"module": "@/types",
+				"isDefault": false
+			}
+		],
+		"Transition": [
+			{
+				"name": "Transition",
+				"module": "@headlessui/react",
+				"isDefault": false
+			}
+		],
+		"Form": [
+			{
+				"name": "Form",
+				"module": "@/components/ui/form",
+				"isDefault": false
+			},
+			{
+				"name": "Form",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"Link": [
+			{
+				"name": "Link",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"DeleteUser": [
+			{
+				"name": "DeleteUser",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\delete-user.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "DeleteUser",
+				"module": "@/components/delete-user",
+				"isDefault": true
+			}
+		],
+		"HeadingSmall": [
+			{
+				"name": "HeadingSmall",
+				"module": "@/components/heading-small",
+				"isDefault": true
+			},
+			{
+				"name": "HeadingSmall",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\heading-small.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"InputError": [
+			{
+				"name": "InputError",
+				"module": "@/components/input-error",
+				"isDefault": true
+			},
+			{
+				"name": "InputError",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\input-error.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Button": [
+			{
+				"name": "Button",
+				"module": "@/components/ui/button",
+				"isDefault": false
+			}
+		],
+		"Input": [
+			{
+				"name": "Input",
+				"module": "@/components/ui/input",
+				"isDefault": false
+			}
+		],
+		"Label": [
+			{
+				"name": "Label",
+				"module": "@/components/ui/label",
+				"isDefault": false
+			},
+			{
+				"name": "Label",
+				"module": "recharts",
+				"isDefault": false
+			}
+		],
+		"SettingsLayout": [
+			{
+				"name": "SettingsLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\settings\\layout.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "SettingsLayout",
+				"module": "@/layouts/settings/layout",
+				"isDefault": true
+			}
+		],
+		"edit": [
+			{
+				"name": "edit",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Settings\\PasswordController.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "edit",
+				"module": "@/routes/profile",
+				"isDefault": false
+			}
+		],
+		"Password": [
+			{
+				"name": "Password",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\settings\\password.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"useRef": [
+			{
+				"name": "useRef",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"Appearance": [
+			{
+				"name": "Appearance",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\hooks\\use-appearance.tsx",
+				"type": "type",
+				"isDefault": true
+			},
+			{
+				"name": "Appearance",
+				"module": "@/hooks/use-appearance",
+				"isDefault": false
+			}
+		],
+		"AppearanceTabs": [
+			{
+				"name": "AppearanceTabs",
+				"module": "@/components/appearance-tabs",
+				"isDefault": true
+			}
+		],
+		"VerifyEmail": [
+			{
+				"name": "VerifyEmail",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\auth\\verify-email.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"store": [
+			{
+				"name": "store",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\NewPasswordController.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "store",
+				"module": "@/actions/App/Http/Controllers/Auth/ConfirmablePasswordController",
+				"isDefault": false
+			},
+			{
+				"name": "store",
+				"module": "@/actions/App/Http/Controllers/Auth/PasswordResetLinkController",
+				"isDefault": false
+			},
+			{
+				"name": "store",
+				"module": "@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController",
+				"isDefault": false
+			},
+			{
+				"name": "store",
+				"module": "@/actions/App/Http/Controllers/Auth/RegisteredUserController",
+				"isDefault": false
+			},
+			{
+				"name": "store",
+				"module": "@/actions/App/Http/Controllers/Auth/NewPasswordController",
+				"isDefault": false
+			},
+			{
+				"name": "store",
+				"module": "@/actions/App/Http/Controllers/Auth/EmailVerificationNotificationController",
+				"isDefault": false
+			}
+		],
+		"logout": [
+			{
+				"name": "logout",
+				"module": "@/routes",
+				"isDefault": false
+			},
+			{
+				"name": "logout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"LoaderCircle": [
+			{
+				"name": "LoaderCircle",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"TextLink": [
+			{
+				"name": "TextLink",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\text-link.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "TextLink",
+				"module": "@/components/text-link",
+				"isDefault": true
+			}
+		],
+		"AuthLayout": [
+			{
+				"name": "AuthLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\auth-layout.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "AuthLayout",
+				"module": "@/layouts/auth-layout",
+				"isDefault": true
+			}
+		],
+		"ResetPassword": [
+			{
+				"name": "ResetPassword",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\auth\\reset-password.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Register": [
+			{
+				"name": "Register",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\auth\\register.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"login": [
+			{
+				"name": "login",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "login",
+				"module": "@/routes",
+				"isDefault": false
+			}
+		],
+		"Login": [
+			{
+				"name": "Login",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\auth\\login.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Checkbox": [
+			{
+				"name": "Checkbox",
+				"module": "@/components/ui/checkbox",
+				"isDefault": false
+			}
+		],
+		"register": [
+			{
+				"name": "register",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "register",
+				"module": "@/routes",
+				"isDefault": false
+			}
+		],
+		"request": [
+			{
+				"name": "request",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\password\\index.ts",
+				"type": "const",
+				"isDefault": false
+			},
+			{
+				"name": "request",
+				"module": "@/routes/password",
+				"isDefault": false
+			}
+		],
+		"ForgotPassword": [
+			{
+				"name": "ForgotPassword",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\auth\\forgot-password.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"ConfirmPassword": [
+			{
+				"name": "ConfirmPassword",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\pages\\auth\\confirm-password.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"QueryParams": [
+			{
+				"name": "QueryParams",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"RouteDefinition": [
+			{
+				"name": "RouteDefinition",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"RouteFormDefinition": [
+			{
+				"name": "RouteFormDefinition",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"RouteQueryOptions": [
+			{
+				"name": "RouteQueryOptions",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"queryParams": [
+			{
+				"name": "queryParams",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"setUrlDefaults": [
+			{
+				"name": "setUrlDefaults",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"addUrlDefault": [
+			{
+				"name": "addUrlDefault",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"applyUrlDefaults": [
+			{
+				"name": "applyUrlDefaults",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"validateParameters": [
+			{
+				"name": "validateParameters",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\wayfinder\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"Auth": [
+			{
+				"name": "Auth",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\index.ts",
+				"type": "interface",
+				"isDefault": true
+			}
+		],
+		"BreadcrumbItem": [
+			{
+				"name": "BreadcrumbItem",
+				"module": "@/components/ui/breadcrumb",
+				"isDefault": false
+			},
+			{
+				"name": "BreadcrumbItem",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"NavGroup": [
+			{
+				"name": "NavGroup",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"NavItem": [
+			{
+				"name": "NavItem",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"SharedData": [
+			{
+				"name": "SharedData",
+				"module": "@/types",
+				"isDefault": false
+			},
+			{
+				"name": "SharedData",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"User": [
+			{
+				"name": "User",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\types\\index.d.ts",
+				"type": "interface",
+				"isDefault": false
+			}
+		],
+		"InertiaLinkProps": [
+			{
+				"name": "InertiaLinkProps",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"LucideIcon": [
+			{
+				"name": "LucideIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"type { Config": [
+			{
+				"name": "type { Config",
+				"module": "ziggy-js",
+				"isDefault": true
+			}
+		],
+		"type { route as routeFn": [
+			{
+				"name": "type { route as routeFn",
+				"module": "ziggy-js",
+				"isDefault": true
+			}
+		],
+		"createInertiaApp": [
+			{
+				"name": "createInertiaApp",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"createServer": [
+			{
+				"name": "createServer",
+				"module": "@inertiajs/react/server",
+				"isDefault": true
+			}
+		],
+		"resolvePageComponent": [
+			{
+				"name": "resolvePageComponent",
+				"module": "laravel-vite-plugin/inertia-helpers",
+				"isDefault": false
+			}
+		],
+		"ReactDOMServer": [
+			{
+				"name": "ReactDOMServer",
+				"module": "react-dom/server",
+				"isDefault": true
+			}
+		],
+		"type RouteName": [
+			{
+				"name": "type RouteName",
+				"module": "ziggy-js",
+				"isDefault": false
+			}
+		],
+		"cn": [
+			{
+				"name": "cn",
+				"module": "@/lib/utils",
+				"isDefault": false
+			},
+			{
+				"name": "cn",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\lib\\utils.ts",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"type ClassValue": [
+			{
+				"name": "type ClassValue",
+				"module": "clsx",
+				"isDefault": false
+			}
+		],
+		"clsx": [
+			{
+				"name": "clsx",
+				"module": "clsx",
+				"isDefault": false
+			}
+		],
+		"twMerge": [
+			{
+				"name": "twMerge",
+				"module": "tailwind-merge",
+				"isDefault": false
+			}
+		],
+		"local": [
+			{
+				"name": "local",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\storage\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"storage": [
+			{
+				"name": "storage",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\storage\\index.ts",
+				"isDefault": true
+			}
+		],
+		"notice": [
+			{
+				"name": "notice",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\verification\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"verify": [
+			{
+				"name": "verify",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\verification\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"verification": [
+			{
+				"name": "verification",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\verification\\index.ts",
+				"isDefault": true
+			}
+		],
+		"AuthLayoutTemplate": [
+			{
+				"name": "AuthLayoutTemplate",
+				"module": "@/layouts/auth/auth-simple-layout",
+				"isDefault": true
+			}
+		],
+		"default": [
+			{
+				"name": "default",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\app-layout.tsx",
+				"isDefault": false
+			}
+		],
+		"AppLayoutTemplate": [
+			{
+				"name": "AppLayoutTemplate",
+				"module": "@/layouts/app/app-sidebar-layout",
+				"isDefault": true
+			}
+		],
+		"type ReactNode": [
+			{
+				"name": "type ReactNode",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"Toaster": [
+			{
+				"name": "Toaster",
+				"module": "react-hot-toast",
+				"isDefault": false
+			}
+		],
+		"Heading": [
+			{
+				"name": "Heading",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\heading.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "Heading",
+				"module": "@/components/heading",
+				"isDefault": true
+			}
+		],
+		"Separator": [
+			{
+				"name": "Separator",
+				"module": "@/components/ui/separator",
+				"isDefault": false
+			}
+		],
+		"type NavItem": [
+			{
+				"name": "type NavItem",
+				"module": "@/types",
+				"isDefault": false
+			}
+		],
+		"type PropsWithChildren": [
+			{
+				"name": "type PropsWithChildren",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"AppSidebarLayout": [
+			{
+				"name": "AppSidebarLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\app\\app-sidebar-layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AppContent": [
+			{
+				"name": "AppContent",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-content.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "AppContent",
+				"module": "@/components/app-content",
+				"isDefault": false
+			}
+		],
+		"AppShell": [
+			{
+				"name": "AppShell",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-shell.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "AppShell",
+				"module": "@/components/app-shell",
+				"isDefault": false
+			}
+		],
+		"AppSidebarHeader": [
+			{
+				"name": "AppSidebarHeader",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-sidebar-header.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "AppSidebarHeader",
+				"module": "@/components/app-sidebar-header",
+				"isDefault": false
+			}
+		],
+		"AppHeaderLayout": [
+			{
+				"name": "AppHeaderLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\app\\app-header-layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AppHeader": [
+			{
+				"name": "AppHeader",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-header.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "AppHeader",
+				"module": "@/components/app-header",
+				"isDefault": false
+			}
+		],
+		"type { PropsWithChildren": [
+			{
+				"name": "type { PropsWithChildren",
+				"module": "react",
+				"isDefault": true
+			}
+		],
+		"AuthSplitLayout": [
+			{
+				"name": "AuthSplitLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\auth\\auth-split-layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AppLogoIcon": [
+			{
+				"name": "AppLogoIcon",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-logo-icon.tsx",
+				"type": "function",
+				"isDefault": true
+			},
+			{
+				"name": "AppLogoIcon",
+				"module": "@/components/app-logo-icon",
+				"isDefault": true
+			}
+		],
+		"AuthSimpleLayout": [
+			{
+				"name": "AuthSimpleLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\auth\\auth-simple-layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"AuthCardLayout": [
+			{
+				"name": "AuthCardLayout",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\layouts\\auth\\auth-card-layout.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Card": [
+			{
+				"name": "Card",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"CardContent": [
+			{
+				"name": "CardContent",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"CardDescription": [
+			{
+				"name": "CardDescription",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"CardHeader": [
+			{
+				"name": "CardHeader",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"CardTitle": [
+			{
+				"name": "CardTitle",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"home": [
+			{
+				"name": "home",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"dashboard": [
+			{
+				"name": "dashboard",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"turnos": [
+			{
+				"name": "turnos",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"pacientes": [
+			{
+				"name": "pacientes",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"appearance": [
+			{
+				"name": "appearance",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"destroy": [
+			{
+				"name": "destroy",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Settings\\ProfileController.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"profile": [
+			{
+				"name": "profile",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\profile\\index.ts",
+				"isDefault": true
+			}
+		],
+		"email": [
+			{
+				"name": "email",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\password\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"reset": [
+			{
+				"name": "reset",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\password\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"confirm": [
+			{
+				"name": "confirm",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\password\\index.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"password": [
+			{
+				"name": "password",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\routes\\password\\index.ts",
+				"isDefault": true
+			}
+		],
+		"App": [
+			{
+				"name": "App",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\index.ts",
+				"isDefault": true
+			}
+		],
+		"createRoot": [
+			{
+				"name": "createRoot",
+				"module": "react-dom/client",
+				"isDefault": false
+			}
+		],
+		"UserInfo": [
+			{
+				"name": "UserInfo",
+				"module": "@/components/user-info",
+				"isDefault": false
+			},
+			{
+				"name": "UserInfo",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\user-info.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Avatar": [
+			{
+				"name": "Avatar",
+				"module": "@/components/ui/avatar",
+				"isDefault": false
+			}
+		],
+		"AvatarFallback": [
+			{
+				"name": "AvatarFallback",
+				"module": "@/components/ui/avatar",
+				"isDefault": false
+			}
+		],
+		"AvatarImage": [
+			{
+				"name": "AvatarImage",
+				"module": "@/components/ui/avatar",
+				"isDefault": false
+			}
+		],
+		"useInitials": [
+			{
+				"name": "useInitials",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\hooks\\use-initials.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "useInitials",
+				"module": "@/hooks/use-initials",
+				"isDefault": false
+			}
+		],
+		"type User": [
+			{
+				"name": "type User",
+				"module": "@/types",
+				"isDefault": false
+			}
+		],
+		"Dialog": [
+			{
+				"name": "Dialog",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"DialogClose": [
+			{
+				"name": "DialogClose",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"DialogContent": [
+			{
+				"name": "DialogContent",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"DialogHeader": [
+			{
+				"name": "DialogHeader",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"DialogTitle": [
+			{
+				"name": "DialogTitle",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"DialogTrigger": [
+			{
+				"name": "DialogTrigger",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"FormControl": [
+			{
+				"name": "FormControl",
+				"module": "@/components/ui/form",
+				"isDefault": false
+			}
+		],
+		"FormField": [
+			{
+				"name": "FormField",
+				"module": "@/components/ui/form",
+				"isDefault": false
+			}
+		],
+		"FormItem": [
+			{
+				"name": "FormItem",
+				"module": "@/components/ui/form",
+				"isDefault": false
+			}
+		],
+		"FormLabel": [
+			{
+				"name": "FormLabel",
+				"module": "@/components/ui/form",
+				"isDefault": false
+			}
+		],
+		"FormMessage": [
+			{
+				"name": "FormMessage",
+				"module": "@/components/ui/form",
+				"isDefault": false
+			}
+		],
+		"IconPlus": [
+			{
+				"name": "IconPlus",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"useForm": [
+			{
+				"name": "useForm",
+				"module": "react-hook-form",
+				"isDefault": false
+			}
+		],
+		"toast": [
+			{
+				"name": "toast",
+				"module": "react-hot-toast",
+				"isDefault": true
+			}
+		],
+		"schema": [
+			{
+				"name": "schema",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\vehicles\\data-table.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"restrictToVerticalAxis": [
+			{
+				"name": "restrictToVerticalAxis",
+				"module": "@dnd-kit/modifiers",
+				"isDefault": false
+			}
+		],
+		"arrayMove": [
+			{
+				"name": "arrayMove",
+				"module": "@dnd-kit/sortable",
+				"isDefault": false
+			}
+		],
+		"SortableContext": [
+			{
+				"name": "SortableContext",
+				"module": "@dnd-kit/sortable",
+				"isDefault": false
+			}
+		],
+		"useSortable": [
+			{
+				"name": "useSortable",
+				"module": "@dnd-kit/sortable",
+				"isDefault": false
+			}
+		],
+		"verticalListSortingStrategy": [
+			{
+				"name": "verticalListSortingStrategy",
+				"module": "@dnd-kit/sortable",
+				"isDefault": false
+			}
+		],
+		"CSS": [
+			{
+				"name": "CSS",
+				"module": "@dnd-kit/utilities",
+				"isDefault": false
+			}
+		],
+		"format": [
+			{
+				"name": "format",
+				"module": "date-fns",
+				"isDefault": false
+			}
+		],
+		"parseISO": [
+			{
+				"name": "parseISO",
+				"module": "date-fns",
+				"isDefault": false
+			}
+		],
+		"React": [
+			{
+				"name": "React",
+				"module": "react",
+				"isDefault": true,
+				"asDefinition": "* as React"
+			}
+		],
+		"z": [
+			{
+				"name": "z",
+				"module": "zod",
+				"isDefault": false
+			}
+		],
+		"ChartConfig": [
+			{
+				"name": "ChartConfig",
+				"module": "@/components/ui/chart",
+				"isDefault": false
+			},
+			{
+				"name": "ChartConfig",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\ui\\chart.tsx",
+				"type": "type",
+				"isDefault": false
+			}
+		],
+		"Select": [
+			{
+				"name": "Select",
+				"module": "@/components/ui/select",
+				"isDefault": false
+			}
+		],
+		"SelectContent": [
+			{
+				"name": "SelectContent",
+				"module": "@/components/ui/select",
+				"isDefault": false
+			}
+		],
+		"SelectItem": [
+			{
+				"name": "SelectItem",
+				"module": "@/components/ui/select",
+				"isDefault": false
+			}
+		],
+		"SelectTrigger": [
+			{
+				"name": "SelectTrigger",
+				"module": "@/components/ui/select",
+				"isDefault": false
+			}
+		],
+		"SelectValue": [
+			{
+				"name": "SelectValue",
+				"module": "@/components/ui/select",
+				"isDefault": false
+			}
+		],
+		"Table": [
+			{
+				"name": "Table",
+				"module": "@/components/ui/table",
+				"isDefault": false
+			}
+		],
+		"TableBody": [
+			{
+				"name": "TableBody",
+				"module": "@/components/ui/table",
+				"isDefault": false
+			}
+		],
+		"TableCell": [
+			{
+				"name": "TableCell",
+				"module": "@/components/ui/table",
+				"isDefault": false
+			}
+		],
+		"TableHead": [
+			{
+				"name": "TableHead",
+				"module": "@/components/ui/table",
+				"isDefault": false
+			}
+		],
+		"TableHeader": [
+			{
+				"name": "TableHeader",
+				"module": "@/components/ui/table",
+				"isDefault": false
+			}
+		],
+		"TableRow": [
+			{
+				"name": "TableRow",
+				"module": "@/components/ui/table",
+				"isDefault": false
+			}
+		],
+		"Tabs": [
+			{
+				"name": "Tabs",
+				"module": "@/components/ui/tabs",
+				"isDefault": false
+			}
+		],
+		"TabsContent": [
+			{
+				"name": "TabsContent",
+				"module": "@/components/ui/tabs",
+				"isDefault": false
+			}
+		],
+		"useIsMobile": [
+			{
+				"name": "useIsMobile",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\hooks\\use-mobile.ts",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "useIsMobile",
+				"module": "@/hooks/use-mobile",
+				"isDefault": false
+			}
+		],
+		"SlidersHorizontal": [
+			{
+				"name": "SlidersHorizontal",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"DialogFooter": [
+			{
+				"name": "DialogFooter",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"UserMenuContent": [
+			{
+				"name": "UserMenuContent",
+				"module": "@/components/user-menu-content",
+				"isDefault": false
+			},
+			{
+				"name": "UserMenuContent",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\user-menu-content.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"DropdownMenuGroup": [
+			{
+				"name": "DropdownMenuGroup",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"DropdownMenuItem": [
+			{
+				"name": "DropdownMenuItem",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"DropdownMenuLabel": [
+			{
+				"name": "DropdownMenuLabel",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"DropdownMenuSeparator": [
+			{
+				"name": "DropdownMenuSeparator",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"useMobileNavigation": [
+			{
+				"name": "useMobileNavigation",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\hooks\\use-mobile-navigation.ts",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "useMobileNavigation",
+				"module": "@/hooks/use-mobile-navigation",
+				"isDefault": false
+			}
+		],
+		"router": [
+			{
+				"name": "router",
+				"module": "@inertiajs/react",
+				"isDefault": false
+			}
+		],
+		"LogOut": [
+			{
+				"name": "LogOut",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Settings": [
+			{
+				"name": "Settings",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Settings\\index.ts",
+				"isDefault": true
+			},
+			{
+				"name": "Settings",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"ComponentProps": [
+			{
+				"name": "ComponentProps",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"SidebarTrigger": [
+			{
+				"name": "SidebarTrigger",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"RegisterForm": [
+			{
+				"name": "RegisterForm",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\sign-form.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"IconTrendingDown": [
+			{
+				"name": "IconTrendingDown",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"IconTrendingUp": [
+			{
+				"name": "IconTrendingUp",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"Badge": [
+			{
+				"name": "Badge",
+				"module": "@/components/ui/badge",
+				"isDefault": false
+			}
+		],
+		"CardAction": [
+			{
+				"name": "CardAction",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"CardFooter": [
+			{
+				"name": "CardFooter",
+				"module": "@/components/ui/card",
+				"isDefault": false
+			}
+		],
+		"NavUser": [
+			{
+				"name": "NavUser",
+				"module": "@/components/nav-user",
+				"isDefault": false
+			},
+			{
+				"name": "NavUser",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\nav-user.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"DropdownMenu": [
+			{
+				"name": "DropdownMenu",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"DropdownMenuContent": [
+			{
+				"name": "DropdownMenuContent",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"DropdownMenuTrigger": [
+			{
+				"name": "DropdownMenuTrigger",
+				"module": "@/components/ui/dropdown-menu",
+				"isDefault": false
+			}
+		],
+		"SidebarMenu": [
+			{
+				"name": "SidebarMenu",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarMenuButton": [
+			{
+				"name": "SidebarMenuButton",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarMenuItem": [
+			{
+				"name": "SidebarMenuItem",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"useSidebar": [
+			{
+				"name": "useSidebar",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"ChevronsUpDown": [
+			{
+				"name": "ChevronsUpDown",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"NavSecondary": [
+			{
+				"name": "NavSecondary",
+				"module": "@/components/nav-secondary",
+				"isDefault": false
+			},
+			{
+				"name": "NavSecondary",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\nav-secondary.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"type Icon": [
+			{
+				"name": "type Icon",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"SidebarGroup": [
+			{
+				"name": "SidebarGroup",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarGroupContent": [
+			{
+				"name": "SidebarGroupContent",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"NavMain": [
+			{
+				"name": "NavMain",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\nav-main.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"IconCirclePlusFilled": [
+			{
+				"name": "IconCirclePlusFilled",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"NavFooter": [
+			{
+				"name": "NavFooter",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\nav-footer.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Icon": [
+			{
+				"name": "Icon",
+				"module": "@/components/icon",
+				"isDefault": false
+			},
+			{
+				"name": "Icon",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\icon.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"type ComponentPropsWithoutRef": [
+			{
+				"name": "type ComponentPropsWithoutRef",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"NavDocuments": [
+			{
+				"name": "NavDocuments",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\nav-documents.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"IconDots": [
+			{
+				"name": "IconDots",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"IconFolder": [
+			{
+				"name": "IconFolder",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"IconShare3": [
+			{
+				"name": "IconShare3",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"IconTrash": [
+			{
+				"name": "IconTrash",
+				"module": "@tabler/icons-react",
+				"isDefault": false
+			}
+		],
+		"LoginForm": [
+			{
+				"name": "LoginForm",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\login-form.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Http": [
+			{
+				"name": "Http",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\index.ts",
+				"isDefault": true
+			}
+		],
+		"Slot": [
+			{
+				"name": "Slot",
+				"module": "@radix-ui/react-slot",
+				"isDefault": false
+			}
+		],
+		"cva": [
+			{
+				"name": "cva",
+				"module": "class-variance-authority",
+				"isDefault": false
+			}
+		],
+		"VariantProps": [
+			{
+				"name": "VariantProps",
+				"module": "class-variance-authority",
+				"isDefault": false
+			}
+		],
+		"PanelLeftIcon": [
+			{
+				"name": "PanelLeftIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Skeleton": [
+			{
+				"name": "Skeleton",
+				"module": "@/components/ui/skeleton",
+				"isDefault": false
+			}
+		],
+		"SheetPrimitive": [
+			{
+				"name": "SheetPrimitive",
+				"module": "@radix-ui/react-dialog",
+				"isDefault": true,
+				"asDefinition": "* as SheetPrimitive"
+			}
+		],
+		"XIcon": [
+			{
+				"name": "XIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"SeparatorPrimitive": [
+			{
+				"name": "SeparatorPrimitive",
+				"module": "@radix-ui/react-separator",
+				"isDefault": true,
+				"asDefinition": "* as SeparatorPrimitive"
+			}
+		],
+		"SelectPrimitive": [
+			{
+				"name": "SelectPrimitive",
+				"module": "@radix-ui/react-select",
+				"isDefault": true,
+				"asDefinition": "* as SelectPrimitive"
+			}
+		],
+		"CheckIcon": [
+			{
+				"name": "CheckIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"ChevronDownIcon": [
+			{
+				"name": "ChevronDownIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"ChevronUpIcon": [
+			{
+				"name": "ChevronUpIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"useTheme": [
+			{
+				"name": "useTheme",
+				"module": "next-themes",
+				"isDefault": false
+			}
+		],
+		"Toaster as Sonner": [
+			{
+				"name": "Toaster as Sonner",
+				"module": "sonner",
+				"isDefault": false
+			}
+		],
+		"ToasterProps": [
+			{
+				"name": "ToasterProps",
+				"module": "sonner",
+				"isDefault": false
+			}
+		],
+		"RedirectController": [
+			{
+				"name": "RedirectController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\Illuminate\\Routing\\RedirectController.ts",
+				"isDefault": true
+			}
+		],
+		"Routing": [
+			{
+				"name": "Routing",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\Illuminate\\Routing\\index.ts",
+				"isDefault": true
+			}
+		],
+		"PlaceholderPattern": [
+			{
+				"name": "PlaceholderPattern",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\ui\\placeholder-pattern.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"useId": [
+			{
+				"name": "useId",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"NavigationMenuPrimitive": [
+			{
+				"name": "NavigationMenuPrimitive",
+				"module": "@radix-ui/react-navigation-menu",
+				"isDefault": true,
+				"asDefinition": "* as NavigationMenuPrimitive"
+			}
+		],
+		"LabelPrimitive": [
+			{
+				"name": "LabelPrimitive",
+				"module": "@radix-ui/react-label",
+				"isDefault": true,
+				"asDefinition": "* as LabelPrimitive"
+			}
+		],
+		"DropdownMenuPrimitive": [
+			{
+				"name": "DropdownMenuPrimitive",
+				"module": "@radix-ui/react-dropdown-menu",
+				"isDefault": true,
+				"asDefinition": "* as DropdownMenuPrimitive"
+			}
+		],
+		"ChevronRightIcon": [
+			{
+				"name": "ChevronRightIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"CircleIcon": [
+			{
+				"name": "CircleIcon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Drawer as DrawerPrimitive": [
+			{
+				"name": "Drawer as DrawerPrimitive",
+				"module": "vaul",
+				"isDefault": false
+			}
+		],
+		"DialogPrimitive": [
+			{
+				"name": "DialogPrimitive",
+				"module": "@radix-ui/react-dialog",
+				"isDefault": true,
+				"asDefinition": "* as DialogPrimitive"
+			}
+		],
+		"CollapsiblePrimitive": [
+			{
+				"name": "CollapsiblePrimitive",
+				"module": "@radix-ui/react-collapsible",
+				"isDefault": true,
+				"asDefinition": "* as CollapsiblePrimitive"
+			}
+		],
+		"CheckboxPrimitive": [
+			{
+				"name": "CheckboxPrimitive",
+				"module": "@radix-ui/react-checkbox",
+				"isDefault": true,
+				"asDefinition": "* as CheckboxPrimitive"
+			}
+		],
+		"RechartsPrimitive": [
+			{
+				"name": "RechartsPrimitive",
+				"module": "recharts",
+				"isDefault": true,
+				"asDefinition": "* as RechartsPrimitive"
+			}
+		],
+		"type VariantProps": [
+			{
+				"name": "type VariantProps",
+				"module": "class-variance-authority",
+				"isDefault": false
+			}
+		],
+		"ChevronRight": [
+			{
+				"name": "ChevronRight",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"MoreHorizontal": [
+			{
+				"name": "MoreHorizontal",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"AvatarPrimitive": [
+			{
+				"name": "AvatarPrimitive",
+				"module": "@radix-ui/react-avatar",
+				"isDefault": true,
+				"asDefinition": "* as AvatarPrimitive"
+			}
+		],
+		"Illuminate": [
+			{
+				"name": "Illuminate",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\Illuminate\\index.ts",
+				"isDefault": true
+			}
+		],
+		"type HTMLAttributes": [
+			{
+				"name": "type HTMLAttributes",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"type LucideProps": [
+			{
+				"name": "type LucideProps",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"type ComponentType": [
+			{
+				"name": "type ComponentType",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"DialogDescription": [
+			{
+				"name": "DialogDescription",
+				"module": "@/components/ui/dialog",
+				"isDefault": false
+			}
+		],
+		"TooltipPrimitive": [
+			{
+				"name": "TooltipPrimitive",
+				"module": "@radix-ui/react-tooltip",
+				"isDefault": true,
+				"asDefinition": "* as TooltipPrimitive"
+			}
+		],
+		"TogglePrimitive": [
+			{
+				"name": "TogglePrimitive",
+				"module": "@radix-ui/react-toggle",
+				"isDefault": true,
+				"asDefinition": "* as TogglePrimitive"
+			}
+		],
+		"index": [
+			{
+				"name": "index",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\ClienteControlador.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"PacientesControlador": [
+			{
+				"name": "PacientesControlador",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\PacientesControlador.ts",
+				"isDefault": true
+			}
+		],
+		"Controllers": [
+			{
+				"name": "Controllers",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\index.ts",
+				"isDefault": true
+			}
+		],
+		"ToggleGroupPrimitive": [
+			{
+				"name": "ToggleGroupPrimitive",
+				"module": "@radix-ui/react-toggle-group",
+				"isDefault": true,
+				"asDefinition": "* as ToggleGroupPrimitive"
+			}
+		],
+		"toggleVariants": [
+			{
+				"name": "toggleVariants",
+				"module": "@/components/ui/toggle",
+				"isDefault": false
+			}
+		],
+		"ClienteControlador": [
+			{
+				"name": "ClienteControlador",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\ClienteControlador.ts",
+				"isDefault": true
+			}
+		],
+		"TabsPrimitive": [
+			{
+				"name": "TabsPrimitive",
+				"module": "@radix-ui/react-tabs",
+				"isDefault": true,
+				"asDefinition": "* as TabsPrimitive"
+			}
+		],
+		"description": [
+			{
+				"name": "description",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\chart-area-interactive.tsx",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"Area": [
+			{
+				"name": "Area",
+				"module": "recharts",
+				"isDefault": false
+			}
+		],
+		"AreaChart": [
+			{
+				"name": "AreaChart",
+				"module": "recharts",
+				"isDefault": false
+			}
+		],
+		"CartesianGrid": [
+			{
+				"name": "CartesianGrid",
+				"module": "recharts",
+				"isDefault": false
+			}
+		],
+		"XAxis": [
+			{
+				"name": "XAxis",
+				"module": "recharts",
+				"isDefault": false
+			}
+		],
+		"ChartContainer": [
+			{
+				"name": "ChartContainer",
+				"module": "@/components/ui/chart",
+				"isDefault": false
+			}
+		],
+		"ChartTooltip": [
+			{
+				"name": "ChartTooltip",
+				"module": "@/components/ui/chart",
+				"isDefault": false
+			}
+		],
+		"ChartTooltipContent": [
+			{
+				"name": "ChartTooltipContent",
+				"module": "@/components/ui/chart",
+				"isDefault": false
+			}
+		],
+		"ToggleGroup": [
+			{
+				"name": "ToggleGroup",
+				"module": "@/components/ui/toggle-group",
+				"isDefault": false
+			}
+		],
+		"ToggleGroupItem": [
+			{
+				"name": "ToggleGroupItem",
+				"module": "@/components/ui/toggle-group",
+				"isDefault": false
+			}
+		],
+		"Breadcrumbs": [
+			{
+				"name": "Breadcrumbs",
+				"module": "@/components/breadcrumbs",
+				"isDefault": false
+			},
+			{
+				"name": "Breadcrumbs",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\breadcrumbs.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"Breadcrumb": [
+			{
+				"name": "Breadcrumb",
+				"module": "@/components/ui/breadcrumb",
+				"isDefault": false
+			}
+		],
+		"BreadcrumbLink": [
+			{
+				"name": "BreadcrumbLink",
+				"module": "@/components/ui/breadcrumb",
+				"isDefault": false
+			}
+		],
+		"BreadcrumbList": [
+			{
+				"name": "BreadcrumbList",
+				"module": "@/components/ui/breadcrumb",
+				"isDefault": false
+			}
+		],
+		"BreadcrumbPage": [
+			{
+				"name": "BreadcrumbPage",
+				"module": "@/components/ui/breadcrumb",
+				"isDefault": false
+			}
+		],
+		"BreadcrumbSeparator": [
+			{
+				"name": "BreadcrumbSeparator",
+				"module": "@/components/ui/breadcrumb",
+				"isDefault": false
+			}
+		],
+		"type BreadcrumbItem as BreadcrumbItemType": [
+			{
+				"name": "type BreadcrumbItem as BreadcrumbItemType",
+				"module": "@/types",
+				"isDefault": false
+			}
+		],
+		"Fragment": [
+			{
+				"name": "Fragment",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"AppearanceToggleTab": [
+			{
+				"name": "AppearanceToggleTab",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\appearance-tabs.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"useAppearance": [
+			{
+				"name": "useAppearance",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\hooks\\use-appearance.tsx",
+				"type": "function",
+				"isDefault": false
+			},
+			{
+				"name": "useAppearance",
+				"module": "@/hooks/use-appearance",
+				"isDefault": false
+			}
+		],
+		"Monitor": [
+			{
+				"name": "Monitor",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Moon": [
+			{
+				"name": "Moon",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Sun": [
+			{
+				"name": "Sun",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"HTMLAttributes": [
+			{
+				"name": "HTMLAttributes",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"AppearanceToggleDropdown": [
+			{
+				"name": "AppearanceToggleDropdown",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\appearance-dropdown.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"Sidebar": [
+			{
+				"name": "Sidebar",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarContent": [
+			{
+				"name": "SidebarContent",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarFooter": [
+			{
+				"name": "SidebarFooter",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"SidebarHeader": [
+			{
+				"name": "SidebarHeader",
+				"module": "@/components/ui/sidebar",
+				"isDefault": false
+			}
+		],
+		"useEffect": [
+			{
+				"name": "useEffect",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"AppLogo": [
+			{
+				"name": "AppLogo",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\components\\app-logo.tsx",
+				"type": "function",
+				"isDefault": true
+			}
+		],
+		"NavigationMenu": [
+			{
+				"name": "NavigationMenu",
+				"module": "@/components/ui/navigation-menu",
+				"isDefault": false
+			}
+		],
+		"NavigationMenuItem": [
+			{
+				"name": "NavigationMenuItem",
+				"module": "@/components/ui/navigation-menu",
+				"isDefault": false
+			}
+		],
+		"NavigationMenuList": [
+			{
+				"name": "NavigationMenuList",
+				"module": "@/components/ui/navigation-menu",
+				"isDefault": false
+			}
+		],
+		"navigationMenuTriggerStyle": [
+			{
+				"name": "navigationMenuTriggerStyle",
+				"module": "@/components/ui/navigation-menu",
+				"isDefault": false
+			}
+		],
+		"Sheet": [
+			{
+				"name": "Sheet",
+				"module": "@/components/ui/sheet",
+				"isDefault": false
+			}
+		],
+		"SheetContent": [
+			{
+				"name": "SheetContent",
+				"module": "@/components/ui/sheet",
+				"isDefault": false
+			}
+		],
+		"SheetHeader": [
+			{
+				"name": "SheetHeader",
+				"module": "@/components/ui/sheet",
+				"isDefault": false
+			}
+		],
+		"SheetTitle": [
+			{
+				"name": "SheetTitle",
+				"module": "@/components/ui/sheet",
+				"isDefault": false
+			}
+		],
+		"SheetTrigger": [
+			{
+				"name": "SheetTrigger",
+				"module": "@/components/ui/sheet",
+				"isDefault": false
+			}
+		],
+		"Calendar": [
+			{
+				"name": "Calendar",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"DollarSign": [
+			{
+				"name": "DollarSign",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"LayoutGrid": [
+			{
+				"name": "LayoutGrid",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Menu": [
+			{
+				"name": "Menu",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"Users": [
+			{
+				"name": "Users",
+				"module": "lucide-react",
+				"isDefault": false
+			}
+		],
+		"useCallback": [
+			{
+				"name": "useCallback",
+				"module": "react",
+				"isDefault": false
+			}
+		],
+		"initializeTheme": [
+			{
+				"name": "initializeTheme",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\hooks\\use-appearance.tsx",
+				"type": "function",
+				"isDefault": false
+			}
+		],
+		"create": [
+			{
+				"name": "create",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\NewPasswordController.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"AuthenticatedSessionController": [
+			{
+				"name": "AuthenticatedSessionController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\AuthenticatedSessionController.ts",
+				"isDefault": true
+			}
+		],
+		"show": [
+			{
+				"name": "show",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\ConfirmablePasswordController.ts",
+				"type": "const",
+				"isDefault": false
+			}
+		],
+		"ConfirmablePasswordController": [
+			{
+				"name": "ConfirmablePasswordController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\ConfirmablePasswordController.ts",
+				"isDefault": true
+			}
+		],
+		"ProfileController": [
+			{
+				"name": "ProfileController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Settings\\ProfileController.ts",
+				"isDefault": true
+			}
+		],
+		"EmailVerificationNotificationController": [
+			{
+				"name": "EmailVerificationNotificationController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController.ts",
+				"isDefault": true
+			}
+		],
+		"PasswordController": [
+			{
+				"name": "PasswordController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Settings\\PasswordController.ts",
+				"isDefault": true
+			}
+		],
+		"VerifyEmailController": [
+			{
+				"name": "VerifyEmailController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\VerifyEmailController.ts",
+				"isDefault": true
+			}
+		],
+		"RegisteredUserController": [
+			{
+				"name": "RegisteredUserController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\RegisteredUserController.ts",
+				"isDefault": true
+			}
+		],
+		"PasswordResetLinkController": [
+			{
+				"name": "PasswordResetLinkController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\PasswordResetLinkController.ts",
+				"isDefault": true
+			}
+		],
+		"NewPasswordController": [
+			{
+				"name": "NewPasswordController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\NewPasswordController.ts",
+				"isDefault": true
+			}
+		],
+		"EmailVerificationPromptController": [
+			{
+				"name": "EmailVerificationPromptController",
+				"path": "e:\\Trabajo\\bycar-gestor\\bycar-gestor\\resources\\js\\actions\\App\\Http\\Controllers\\Auth\\EmailVerificationPromptController.ts",
+				"isDefault": true
+			}
+		]
+	}
+}

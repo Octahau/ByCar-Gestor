@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use \Illuminate\Database\QueryException;
+use App\Enums\EstadoVehiculo;
 
 class VehiculoController extends Controller
 {
@@ -47,15 +48,21 @@ class VehiculoController extends Controller
                 'infoAuto' => 'nullable|string|max:255',
             ])->validate();
 
+            if (Vehiculo::where('dominio', $datos['dominio'])->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Ya existe un vehículo con ese dominio.'
+                ], 400);
+            }
 
-            $validated['estado'] = \App\Enums\EstadoVehiculo::DISPONIBLE->value;
+            $validated['estado'] = EstadoVehiculo::DISPONIBLE->value;
 
             $vehiculo = Vehiculo::create($validated);
 
             return response()->json([
                 'success' => true,
                 'vehiculo' => [
-                    'id' => $vehiculo->vehicle_id,
+                    'id' => $vehiculo->vehiculo_id,
                     'marca' => $vehiculo->marca,
                     'modelo' => $vehiculo->modelo,
                     'dominio' => $vehiculo->dominio,
@@ -70,6 +77,7 @@ class VehiculoController extends Controller
                     'estado' => $vehiculo->estado,
                 ]
             ]);
+            
         } catch (QueryException $e) {
             logger('Error DB: ', ['message' => $e->getMessage()]);
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
@@ -88,7 +96,7 @@ class VehiculoController extends Controller
 
         $formatted = $vehiculos->map(function ($v) {
             return [
-                'id' => $v->vehicle_id, // asegurate que la columna se llama "id" en la tabla
+                'id' => $v->vehiculo_id, // asegurate que la columna se llama "id" en la tabla
                 'marca' => $v->marca,
                 'modelo' => $v->modelo,
                 'dominio' => $v->dominio,
@@ -106,6 +114,15 @@ class VehiculoController extends Controller
 
         return Inertia::render('vehiculos', [
             'vehiculos' => $formatted,
+        ]);
+    }
+
+    public function getVehiculos()
+    {
+        $cantidad = Vehiculo::where('estado', 'disponible')->count();
+
+        return response()->json([
+            'cantidad' => $cantidad
         ]);
     }
 }

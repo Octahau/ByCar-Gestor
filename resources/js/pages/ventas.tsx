@@ -1,18 +1,19 @@
 'use client';
 import FiltrosModal from '@/components/vehicles/modal-filtros';
+import { DataTable } from '@/components/ventas/data-table';
 import AddVentaModal from '@/components/ventas/venta-modal';
 import AppLayout from '@/layouts/app-layout';
-import { Venta, VentaTable } from '@/types';
+import { VentaTable } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
-import { DataTable }  from '@/components/ventas/data-table';
 export default function Ventas() {
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
-    const handleVentaCreada = (venta: Venta) => {
+    const handleVentaCreada = (venta: VentaTable) => {
         console.log('Venta registrada:', venta);
-        setMostrarFormulario(false); // ocultar el formulario después de registrar
+        setVentas((prev) => [...prev, venta]); // ahora TypeScript ya no se queja
+        setMostrarFormulario(false);
     };
 
     const { props } = usePage<{ ventas: VentaTable[] }>();

@@ -22,11 +22,6 @@ import { Link } from '@inertiajs/react';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
 const data = {
-    user: {
-        name: 'octavio',
-        email: 'octaviohaurigot@gmail.com',
-        avatar: '/avatars/shadcn.jpg',
-    },
     navMain: [
         {
             title: 'Dashboard',
@@ -51,12 +46,12 @@ const data = {
         },
         {
             title: 'Gastos corrientes',
-            href: '/gastos-corrientes',
+            href: '/GastosCorrientes',
             icon: IconFileDescription, // documentos / gastos generales
         },
         {
             title: 'Gastos de vehículos',
-            href: '/gastos-vehiculos',
+            href: '/GastosVehiculos',
             icon: IconFileWord, // costos específicos de autos
         },
         {

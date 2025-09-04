@@ -55,6 +55,7 @@ export default function AddVehiculoModal({ onVehiculoCreado }: AddVehiculoModalP
                 },
                 body: JSON.stringify(payload),
             });
+                console.log('Datos del auto: ',payload);
 
             const result = await response.json();
             if (result.success) {
@@ -84,7 +85,7 @@ export default function AddVehiculoModal({ onVehiculoCreado }: AddVehiculoModalP
             }
         } catch (error) {
             console.error('Error fetch:', error);
-            toast.error('Error al agregar vehículo: ' + (error instanceof Error ? error.message : ''));
+            toast.error('Erro al agregar rvehículo: ' + (error instanceof Error ? error.message : ''));
         }
     };
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Vehiculo;
 use App\Models\Venta;
 use App\Models\Cliente;
+use App\Models\GastoVehiculo;
+use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -19,10 +21,12 @@ class VentasController extends Controller
     public function index()
     {
         // Cargamos las ventas con los vehículos relacionados
-        $ventas = Venta::with('vehiculo')->get();
+        $ventas = Venta::with('vehiculo', 'user')->get();
 
         $formatted = $ventas->map(function ($v) {
-            $vehiculo = $v->vehiculo; // relación correcta
+            $vehiculo = $v->vehiculo;
+            $user = $v->user;
+
             return [
                 'id' => $v->venta_id,
                 'marca' => $vehiculo->marca ?? '',
@@ -34,7 +38,7 @@ class VentasController extends Controller
                 'ganancia_real_ars' => $v->ganancia_real_ars ?? 0,
                 'ganancia_real_usd' => $v->ganancia_real_usd ?? 0,
                 'fecha' => $v->fecha ? $v->fecha->format('Y-m-d') : '',
-                'vendedor' =>  '',
+                'vendedor' => $user->name ??  '',
             ];
         });
 
@@ -81,41 +85,92 @@ class VentasController extends Controller
                 ], 404);
             }
 
+            $usuario = User::find(intval($data['vendedor']));
+            if (!$usuario) {
+                return response()->json([
+                    'success' => false,
+                    'errors'  => ['vendedor' => ['Vendedor no encontrado']],
+                ], 404);
+            }
+
             $compraArs = $vehiculo->precioARS ?? 0;
             $compraUsd = $vehiculo->precioUSD ?? 0;
 
-            $gananciaRealUsd = $data['valor_venta_usd'] - $compraUsd;
-            $gananciaRealArs =  $data['valor_venta_ars'] - $compraArs;
+            $valorVentaUsd = isset($data['valor_venta_usd']) ? floatval($data['valor_venta_usd']) : 0;
+            $valorVentaArs = isset($data['valor_venta_ars']) ? floatval($data['valor_venta_ars']) : 0;
+
+            $gastoArs = 0;
+            $gastoUsd = 0;
+
+            $gastosVehiculo = GastoVehiculo::where('vehiculo_id', $vehiculo->vehiculo_id)->get();
+
+            foreach ($gastosVehiculo as $gasto) {
+                $gastoArs += $gasto->monto_ars ?? 0;
+                $gastoUsd += $gasto->monto_usd ?? 0;
+            }
+
+            $gananciaRealUsd = ($valorVentaUsd ?? 0) - ($compraUsd ?? 0) - $gastoUsd;
+            $gananciaRealArs = ($valorVentaArs ?? 0) - ($compraArs ?? 0) - $gastoArs;
 
             $fechaVenta = isset($data['fecha_venta'])
                 ? Carbon::parse($data['fecha_venta'])->format('Y-m-d')
                 : now()->format('Y-m-d');
 
+
             $venta = Venta::create([
                 'cliente_id'        => $cliente->cliente_id,
-                'vehicle_id'       => $vehiculo->vehicle_id,
+                'vehiculo_id'       => $vehiculo->vehiculo_id,
                 'procedencia'       => $data['procedencia'] ?? null,
                 'valor_venta_ars'   => $data['valor_venta_ars'] ?? 0,
                 'valor_venta_usd'   => $data['valor_venta_usd'] ?? 0,
                 'ganancia_real_ars' => $gananciaRealArs,
                 'ganancia_real_usd' => $gananciaRealUsd,
                 'fecha'       => $fechaVenta ?? now(),
+                'usuario_id'        => $usuario->id ?? null,
             ]);
 
             if ($venta) {
                 $vehiculo->estado = 'VENDIDO';
                 $vehiculo->save();
+
+                $formattedVenta = [
+                    'id' => $venta->venta_id,
+                    'marca' => $vehiculo->marca ?? '',
+                    'modelo' => $vehiculo->modelo ?? '',
+                    'dominio' => $vehiculo->dominio ?? '',
+                    'procedencia' => $venta->procedencia ?? '',
+                    'valor_venta_ars' => $venta->valor_venta_ars ?? 0,
+                    'valor_venta_usd' => $venta->valor_venta_usd ?? 0,
+                    'ganancia_real_ars' => $venta->ganancia_real_ars ?? 0,
+                    'ganancia_real_usd' => $venta->ganancia_real_usd ?? 0,
+                    'fecha' => $venta->fecha ? Carbon::parse($venta->fecha)->format('Y-m-d') : '',
+                    'vendedor' => $usuario->name ?? '',
+                ];
+
+                return response()->json([
+                    'success' => true,
+                    'venta' => $formattedVenta,
+                    'message' => 'Venta registrada correctamente',
+                ]);
             }
             return response()->json([
-                'success' => true,
-                'venta'   => $venta,
-                'message' => 'Venta registrada correctamente',
-            ]);
+                'success' => false,
+                'message' => 'No se pudo registrar la venta',
+            ], 500);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al registrar la venta: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function getVentas()
+    {
+        $cantidad = Venta::count();
+
+        return response()->json([
+            'cantidad' => $cantidad
+        ]);
     }
 }

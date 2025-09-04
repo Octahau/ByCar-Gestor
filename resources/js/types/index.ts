@@ -1,5 +1,6 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
+import { IconDots } from '@tabler/icons-react';
 
 export interface Auth {
     user: User;
@@ -40,8 +41,10 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
-
-
+export type Empleado = {
+    id: number;
+    name: string;
+}
 export type Vehiculo = {
     id: number;
     marca: string;
@@ -61,6 +64,7 @@ export type Vehiculo = {
 //     href?: string;
 // }
 export type Cliente = {
+    id: number;
     dni: string;
     nombre: string;
     telefono: string;
@@ -89,4 +93,41 @@ export type VentaTable ={
     ganancia_real_usd: number;
     fecha: string; // ISO date string
     vendedor: string;
+}
+export type  GastoCorriente = {
+    operador: string;
+    motivo: string;
+    descripcion: string;
+    importe: number;
+    fondo: string;
+    fecha: string;
+}
+export type  GastoCorrienteTable = {
+    id: number ;
+    operador: string;
+    motivo: string;
+    descripcion: string;
+    importe: number;
+    fondo: string;
+    fecha: string;
+}
+
+export type GastoVehiculo = {
+    dominio: string;
+    operador: string;
+    tipo_gasto: string;
+    descripcion: string;
+    importe: number;
+    fecha: string;
+}
+
+export type GastoVehiculoTable = {
+    id: number ;
+    dominio: string;
+    operador: string;
+    tipo_gasto: string;
+    descripcion: string;
+    importe_ars: number;
+    importe_usd: number;
+    fecha: string;
 }

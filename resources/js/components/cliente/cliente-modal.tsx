@@ -1,39 +1,25 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Cliente } from '@/types';
-import { IconPlus } from '@tabler/icons-react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 interface AddClienteModalProps {
     onClienteCreado: (cliente: Cliente) => void;
+    open?: boolean; // control externo
+    onOpenChange?: (open: boolean) => void; // control externo
 }
 
-export default function AddClienteModal({ onClienteCreado }: AddClienteModalProps) {
-    const [open, setOpen] = useState(false);
-
+export default function AddClienteModal({ onClienteCreado, open, onOpenChange }: AddClienteModalProps) {
     const form = useForm<Cliente>({
-        defaultValues: {
-            dni: '',
-            nombre: '',
-            telefono: '',
-            email: '',
-        },
+        defaultValues: { dni: '', nombre: '', telefono: '', email: '' },
     });
 
     const onSubmit = async (data: Cliente) => {
-        const payload = {
-            ...data,
-            dni: data.dni || '',
-            nombre: data.nombre || '',
-            telefono: data.telefono || '',
-            email: data.email || '',
-        };
-
+        const payload = { ...data };
         try {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const response = await fetch('/clientes', {
@@ -45,31 +31,15 @@ export default function AddClienteModal({ onClienteCreado }: AddClienteModalProp
                 },
                 body: JSON.stringify(payload),
             });
-            console.log('Response status:', response.status);
-            console.log(payload);
+
             const result = await response.json();
-
             if (result.success) {
-                const nuevoCliente: Cliente = {
-                    dni: result.cliente.dni,
-                    nombre: result.cliente.nombre,
-                    telefono: result.cliente.telefono,
-                    email: result.cliente.email,
-                };
-
-                onClienteCreado(nuevoCliente);
-                setOpen(false);
+                onClienteCreado(result.cliente);
                 toast.success('Cliente registrado correctamente');
                 form.reset();
+                onOpenChange?.(false); // cerrar modal
             } else {
-                // Si el backend devuelve errores específicos
-                if (result.errors) {
-                    if (result.errors.dni) {
-                        toast.error('Error al registrar el cliente');
-                    }
-                } else {
-                    toast.error('Error al registrar cliente: ' + (result.message || ''));
-                }
+                toast.error('Error al registrar cliente: ' + (result.message || ''));
             }
         } catch (error) {
             console.error('Error fetch:', error);
@@ -78,13 +48,7 @@ export default function AddClienteModal({ onClienteCreado }: AddClienteModalProp
     };
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <Button>
-                    <IconPlus className="size-4" />
-                    Registrar Cliente
-                </Button>
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Ingrese los datos del cliente</DialogTitle>
@@ -92,8 +56,8 @@ export default function AddClienteModal({ onClienteCreado }: AddClienteModalProp
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
                         {[
-                            { name: 'dni', label: 'DNI', type: 'text', required: true },
                             { name: 'nombre', label: 'Nombre', type: 'text', required: true },
+                            { name: 'dni', label: 'DNI', type: 'text', required: true },
                             { name: 'telefono', label: 'Teléfono', type: 'text', required: false },
                             { name: 'email', label: 'Email', type: 'email', required: false },
                         ].map((field) => (

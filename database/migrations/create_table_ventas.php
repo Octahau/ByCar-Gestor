@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('ventas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vehicle_id')
-            ->references('vehicle_id')->on('vehiculos')
+            $table->foreignId('vehiculo_id')
+            ->references('vehiculo_id')->on('vehiculos')
             ->onDelete('cascade');
 
 

@@ -3,17 +3,21 @@ import FiltrosModal from '@/components/vehicles/modal-filtros';
 import AddClienteModal from '@/components/cliente/cliente-modal';
 import AppLayout from '@/layouts/app-layout';
 import type { Cliente } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
+import {DataTable} from '@/components/cliente/cliente-table';
 export default function Cliente() {
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+        const { props } = usePage<{ clientes: Cliente[] }>();
+    
+    const [clientes, setClientes] = useState<Cliente[]>(props.clientes);
 
     const handleClienteCreado = (cliente: Cliente) => {
         console.log('Cliente registrado:', cliente);
         setMostrarFormulario(false); // ocultar el formulario después de registrar
     };
-
+    console.log(clientes);
     return (
         <AppLayout breadcrumbs={[{ title: 'Clientes', href: '/clientes' }]}>
             <Head title="Clientes" />
@@ -36,7 +40,7 @@ export default function Cliente() {
                     </div>
                 </div>
 
-                {/* <DataTable data={null} /> */}
+                <DataTable data={clientes} /> 
             </div>
         </AppLayout>
     );

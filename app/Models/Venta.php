@@ -14,8 +14,8 @@ class Venta extends Model
 
     protected $fillable = [
         'cliente_id',
-        'vendedor_id',
-        'vehicle_id',
+        'usuario_id',
+        'vehiculo_id',
         'procedencia',
         'valor_venta_ars',
         'valor_venta_usd',
@@ -32,6 +32,11 @@ class Venta extends Model
     // Relación: una venta pertenece a un vehículo
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculo::class, 'vehicle_id', 'vehicle_id');
+        return $this->belongsTo(Vehiculo::class, 'vehiculo_id', 'vehiculo_id');
+    }
+    // Relación: una venta pertenece a un usuario
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'usuario_id', 'id');
     }
 }
