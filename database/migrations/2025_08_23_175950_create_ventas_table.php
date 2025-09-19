@@ -9,11 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ventas', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('vehiculo_id')
-            ->references('vehiculo_id')->on('vehiculos')
-            ->onDelete('cascade');
-
+            $table->id('venta_id');
+            $table->unsignedBigInteger('vehiculo_id');
+            $table->unsignedBigInteger('cliente_id');
+            $table->unsignedBigInteger('usuario_id');
 
             $table->string('procedencia')->nullable();
 
@@ -25,6 +24,11 @@ return new class extends Migration
 
             $table->string('vendedor')->nullable();
             $table->date('fecha')->nullable();
+
+            // Relaciones foráneas
+            $table->foreign('vehiculo_id')->references('vehiculo_id')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('cliente_id')->references('cliente_id')->on('clientes')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

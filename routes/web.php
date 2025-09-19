@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use App\Http\Controllers\VehiculoController;
-use App\Http\Controllers\VentasController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\GastosCorrientesController;
 use App\Http\Controllers\GastoVehiculoController;
-use App\Models\GastoCorriente;
+use App\Http\Controllers\ResumenController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehiculoController;
+use App\Http\Controllers\VentasController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -23,23 +23,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('vehiculos', VehiculoController::class);
     Route::resource('ventas', VentasController::class);
+    Route::get('/ventas/{venta}/detalle', [VentasController::class, 'detalle'])->name('ventas.detalle');
     Route::resource('clientes', ClienteController::class);
     Route::resource('GastosCorrientes', GastosCorrientesController::class);
     Route::resource('GastosVehiculos', GastoVehiculoController::class);
 
     Route::get('/empleados', [UserController::class, 'empleados'])->name('empleados.index');
-    Route::get('/vehiculos-cantidad', [VehiculoController::class, 'getVehiculos'])->name('vehiculos.cantidad')->middleware('auth');
-    Route::get('/ventas-cantidad', [VentasController::class, 'getVentas'])->name('ventas.cantidad')->middleware('auth');
 
-    Route::get('/gastos-corrientes-cantidad', [GastosCorrientesController::class, 'getGastoTotal'])
-        ->name('gastos.cantidad')
-        ->middleware('auth');
-    Route::get('/gasto-vehiculo-cantidad', [GastoVehiculoController::class, 'getGastoTotal'])
-        ->name('gastos.vehiculo.cantidad')
-        ->middleware('auth');
+    // Rutas del dashboard - centralizadas en ResumenController
+    Route::get('/vehiculos-cantidad', [ResumenController::class, 'getVehiculos'])->name('vehiculos.cantidad')->middleware('auth');
+    Route::get('/ventas-cantidad', [ResumenController::class, 'getVentas'])->name('ventas.cantidad')->middleware('auth');
+    Route::get('/gastos-corrientes-cantidad', [ResumenController::class, 'getGastosCorrientes'])->name('gastos.cantidad')->middleware('auth');
+    Route::get('/gasto-vehiculo-cantidad', [ResumenController::class, 'getGastosVehiculos'])->name('gastos.vehiculo.cantidad')->middleware('auth');
+
+    // Rutas para datos históricos de gráficas
+    Route::get('/gastos-corrientes-historicos', [ResumenController::class, 'getGastosCorrientesHistoricos'])->name('gastos.corrientes.historicos')->middleware('auth');
+    Route::get('/gastos-vehiculos-historicos', [ResumenController::class, 'getGastosVehiculosHistoricos'])->name('gastos.vehiculos.historicos')->middleware('auth');
+    Route::get('/ventas-historicas', [ResumenController::class, 'getVentasHistoricas'])->name('ventas.historicas')->middleware('auth');
+    Route::get('/ganancia-total-acumulada', [ResumenController::class, 'getGananciaTotalAcumulada'])->name('ganancia.total.acumulada')->middleware('auth');
+    Route::get('/ganancia-mes-actual', [ResumenController::class, 'getGananciaMesActual'])->name('ganancia.mes.actual')->middleware('auth');
 });
-
-
 
 Route::get('/registro', [RegisteredUserController::class, 'create'])
     ->name('registro.create');
@@ -55,6 +58,5 @@ Route::middleware('guest')->group(function () {
         ->name('login.store'); // Procesa los datos del login
 });
 
-
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

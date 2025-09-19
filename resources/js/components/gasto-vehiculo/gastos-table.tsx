@@ -1,59 +1,32 @@
 import {
-    closestCenter,
-    DndContext,
-    KeyboardSensor,
-    MouseSensor,
-    TouchSensor,
-    useSensor,
-    useSensors,
-    type DragEndEvent,
-    type UniqueIdentifier,
-} from '@dnd-kit/core';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
     IconChevronDown,
     IconChevronLeft,
     IconChevronRight,
     IconChevronsLeft,
     IconChevronsRight,
     IconDotsVertical,
-    IconGripVertical,
     IconLayoutColumns,
+    IconTrash,
+    IconEdit,
+    IconInfoCircle,
 } from '@tabler/icons-react';
 import {
     ColumnDef,
-    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
-    getFacetedRowModel,
-    getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    Row,
     SortingState,
     useReactTable,
     VisibilityState,
 } from '@tanstack/react-table';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isWithinInterval } from 'date-fns';
 import * as React from 'react';
 import { z } from 'zod';
+import { DateRange } from 'react-day-picker';
 
 import { Button } from '@/components/ui/button';
-import { ChartConfig } from '@/components/ui/chart';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from '@/components/ui/drawer';
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -62,13 +35,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Badge } from '@/components/ui/badge';
+import { InfoGastoModal } from './info-modal';
+import { EditGastoModal } from './edit-modal';
+import DeleteModal from '@/components/delete-modal';
+import { toast } from 'react-hot-toast';
 
 export const schema = z.object({
     id: z.number().int(),
@@ -80,50 +53,35 @@ export const schema = z.object({
     dominio: z.string().nullable(),
     fecha: z.string().nullable(),
 });
-// Create a separate component for the drag handle
-function DragHandle({ id }: { id: number }) {
-    const { attributes, listeners } = useSortable({
-        id,
-    });
 
-    return (
-        <Button {...attributes} {...listeners} variant="ghost" size="icon" className="size-7 text-muted-foreground hover:bg-transparent">
-            <IconGripVertical className="size-3 text-muted-foreground" />
-            <span className="sr-only">Reordenar</span>
-        </Button>
-    );
-}
-
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
-    {
-        id: 'drag',
-        header: () => null,
-        cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
-    {
-        id: 'select',
-        header: ({ table }) => (
-            <div className="flex items-center justify-center">
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            </div>
-        ),
-        cell: ({ row }) => (
-            <div className="flex items-center justify-center">
-                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-            </div>
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
+const createColumns = (onGastoActualizado?: () => void): ColumnDef<z.infer<typeof schema>>[] => [
     { accessorKey: 'operador', header: 'Operador', cell: ({ getValue }) => getValue<string>() || '-' },
     { accessorKey: 'tipo_gasto', header: 'Motivo', cell: ({ getValue }) => getValue<string>() || '-' },
     { accessorKey: 'descripcion', header: 'Descripcion', cell: ({ getValue }) => getValue<string>() || '-' },
-    { accessorKey: 'importe_ars', header: 'Importe (ARS)', cell: ({ getValue }) => getValue<number>() ?? '-' },
-    { accessorKey: 'importe_usd', header: 'Importe (USD)', cell: ({ getValue }) => getValue<number>() ?? '-' },
+    { 
+        accessorKey: 'importe_ars', 
+        header: 'Importe (ARS)', 
+        cell: ({ getValue }) => {
+            const value = getValue<number>();
+            if (!value) return '-';
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+            }).format(value);
+        }
+    },
+    { 
+        accessorKey: 'importe_usd', 
+        header: 'Importe (USD)', 
+        cell: ({ getValue }) => {
+            const value = getValue<number>();
+            if (!value) return '-';
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'USD',
+            }).format(value);
+        }
+    },
     { accessorKey: 'dominio', header: 'Dominio', cell: ({ getValue }) => getValue<string>() || '-' },
     {
         accessorKey: 'fecha',
@@ -133,18 +91,48 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
             if (!fechaRaw) return '-';
 
             try {
-                // Intentamos parsear como ISO y formatear a dd/MM/yyyy
                 const parsed = parseISO(fechaRaw);
                 return format(parsed, 'dd/MM/yyyy');
             } catch {
-                // Si no es ISO, lo mostramos tal cual
                 return fechaRaw;
             }
         },
     },
     {
         id: 'actions',
-        cell: () => (
+        cell: ({ row }) => <ActionsCell gasto={row.original} onGastoActualizado={onGastoActualizado} />,
+    },
+];
+
+function ActionsCell({ gasto, onGastoActualizado }: { gasto: z.infer<typeof schema>; onGastoActualizado?: () => void }) {
+    const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`/GastosVehiculos/${gasto.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error al eliminar el gasto');
+            }
+
+            toast.success('Gasto de vehículo eliminado correctamente');
+            onGastoActualizado?.();
+        } catch (error) {
+            console.error('Error al eliminar gasto:', error);
+            toast.error('Error al eliminar el gasto de vehículo');
+        }
+    };
+
+    return (
+        <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="size-8" size="icon">
@@ -152,112 +140,151 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
                         <span className="sr-only">Abrir menu</span>
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem>Informacion</DropdownMenuItem>
+                <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuItem onClick={() => setIsInfoModalOpen(true)}>
+                        <IconInfoCircle className="h-4 w-4 mr-2" />
+                        Información
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsEditModalOpen(true)}>
+                        <IconEdit className="h-4 w-4 mr-2" />
+                        Editar
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
+                    <DropdownMenuItem 
+                        onClick={() => setIsDeleteModalOpen(true)}
+                        className="text-red-600 focus:text-red-600"
+                    >
+                        <IconTrash className="h-4 w-4 mr-2" />
+                        Eliminar
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-    },
-];
 
-function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
-    const { transform, transition, setNodeRef, isDragging } = useSortable({
-        id: row.original.id,
-    });
+            <InfoGastoModal
+                gasto={gasto}
+                isOpen={isInfoModalOpen}
+                onClose={() => setIsInfoModalOpen(false)}
+            />
 
-    return (
-        <TableRow
-            data-state={row.getIsSelected() && 'selected'}
-            data-dragging={isDragging}
-            ref={setNodeRef}
-            className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-            style={{
-                transform: CSS.Transform.toString(transform),
-                transition: transition,
-            }}
-        >
-            {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-            ))}
-        </TableRow>
+            <EditGastoModal
+                gasto={gasto}
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onGastoActualizado={onGastoActualizado}
+            />
+
+            <DeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+                title="Eliminar Gasto de Vehículo"
+                description="¿Estás seguro de que quieres eliminar este gasto? Esta acción no se puede deshacer."
+            />
+        </>
     );
 }
 
-export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[] }) {
+export function DataTable({ 
+    data: initialData, 
+    searchTerm = '',
+    dateRange = undefined,
+    onGastoActualizado
+}: { 
+    data: z.infer<typeof schema>[]; 
+    searchTerm?: string;
+    dateRange?: DateRange | undefined;
+    onGastoActualizado?: () => void;
+}) {
     const [data, setData] = React.useState<z.infer<typeof schema>[]>(() => initialData ?? []);
 
     React.useEffect(() => {
         if (initialData) setData(initialData);
     }, [initialData]);
 
-    const [rowSelection, setRowSelection] = React.useState({});
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    const sortableId = React.useId();
-    const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
 
-    const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
+    // Filter data based on search term and date range
+    const filteredData = React.useMemo(() => {
+        let filtered = data;
+
+        // Apply search filter (operador, tipo_gasto, and dominio)
+        if (searchTerm.trim()) {
+            const searchLower = searchTerm.toLowerCase().trim();
+            filtered = filtered.filter((item) => {
+                const operador = item.operador?.toLowerCase() || '';
+                const tipoGasto = item.tipo_gasto?.toLowerCase() || '';
+                const dominio = item.dominio?.toLowerCase() || '';
+                
+                return operador.includes(searchLower) || tipoGasto.includes(searchLower) || dominio.includes(searchLower);
+            });
+        }
+
+        // Apply date range filter
+        if (dateRange?.from) {
+            filtered = filtered.filter((item) => {
+                if (!item.fecha) return false;
+                
+                try {
+                    const itemDate = parseISO(item.fecha);
+                    const fromDate = dateRange.from!;
+                    const toDate = dateRange.to || dateRange.from!;
+                    
+                    return isWithinInterval(itemDate, { start: fromDate, end: toDate });
+                } catch {
+                    return false;
+                }
+            });
+        }
+
+        return filtered;
+    }, [data, searchTerm, dateRange]);
+
+    const columns = createColumns(onGastoActualizado);
 
     const table = useReactTable({
-        data,
+        data: filteredData,
         columns,
         state: {
             sorting,
             columnVisibility,
-            rowSelection,
-            columnFilters,
             pagination,
         },
-        getRowId: (row) => row.id.toString(),
-        enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
+        getRowId: (row) => {
+            if (!row || !row.id) {
+                return `row-${Math.random()}`;
+            }
+            return row.id.toString();
+        },
         onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getFacetedRowModel: getFacetedRowModel(),
-        getFacetedUniqueValues: getFacetedUniqueValues(),
     });
 
-    function handleDragEnd(event: DragEndEvent) {
-        const { active, over } = event;
-        if (active && over && active.id !== over.id) {
-            setData((data) => {
-                const oldIndex = dataIds.indexOf(active.id);
-                const newIndex = dataIds.indexOf(over.id);
-                return arrayMove(data, oldIndex, newIndex);
-            });
-        }
-    }
-
     return (
-        <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
-            <div className="flex items-center justify-between px-4 lg:px-6">
+        <div className="w-full">
+            <div className="flex items-center justify-between py-4">
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm">
-                                <IconLayoutColumns />
-                                <span className="hidden lg:inline">Modificar columnas</span>
-                                <span className="lg:hidden">Columnas</span>
-                                <IconChevronDown />
+                            <Button variant="outline" size="sm" className="ml-auto">
+                                <IconLayoutColumns className="mr-2 h-4 w-4" />
+                                Modificar columnas
+                                <IconChevronDown className="ml-2 h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuContent align="end">
                             {table
                                 .getAllColumns()
-                                .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
+                                .filter((column) => column.getCanHide())
                                 .map((column) => {
                                     return (
                                         <DropdownMenuCheckboxItem
@@ -272,225 +299,115 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    {/*  <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Add Section</span>
-          </Button> */}
                 </div>
             </div>
-            <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
-                <div className="overflow-hidden rounded-lg border">
-                    <DndContext
-                        collisionDetection={closestCenter}
-                        modifiers={[restrictToVerticalAxis]}
-                        onDragEnd={handleDragEnd}
-                        sensors={sensors}
-                        id={sortableId}
-                    >
-                        <Table>
-                            <TableHeader className="sticky top-0 z-10 bg-muted">
-                                {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id}>
-                                        {headerGroup.headers.map((header) => {
-                                            return (
-                                                <TableHead key={header.id} colSpan={header.colSpan}>
-                                                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                                                </TableHead>
-                                            );
-                                        })}
-                                    </TableRow>
-                                ))}
-                            </TableHeader>
-                            <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                                {table.getRowModel().rows?.length ? (
-                                    <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-                                        {table.getRowModel().rows.map((row) => (
-                                            <DraggableRow key={row.id} row={row} />
-                                        ))}
-                                    </SortableContext>
-                                ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={columns.length} className="h-24 text-center">
-                                            Sin resultados.
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </DndContext>
-                </div>
-                <div className="flex items-center justify-between px-4">
-                    <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
-                        {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
-                    </div>
-                    <div className="flex w-full items-center gap-8 lg:w-fit">
-                        <div className="hidden items-center gap-2 lg:flex">
-                            <Label htmlFor="rows-per-page" className="text-sm font-medium">
-                                Filas por página
-                            </Label>
-                            <Select
-                                value={`${table.getState().pagination.pageSize}`}
-                                onValueChange={(value) => {
-                                    table.setPageSize(Number(value));
-                                }}
-                            >
-                                <SelectTrigger size="sm" className="w-20" id="rows-per-page">
-                                    <SelectValue placeholder={table.getState().pagination.pageSize} />
-                                </SelectTrigger>
-                                <SelectContent side="top">
-                                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                                        <SelectItem key={pageSize} value={`${pageSize}`}>
-                                            {pageSize}
-                                        </SelectItem>
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader className="sticky top-0 z-10 bg-muted">
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => {
+                                    return (
+                                        <TableHead key={header.id} colSpan={header.colSpan}>
+                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                        </TableHead>
+                                    );
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {table.getRowModel().rows?.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                                     ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="flex w-fit items-center justify-center text-sm font-medium">
-                            Pagina {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-                        </div>
-                        <div className="ml-auto flex items-center gap-2 lg:ml-0">
-                            <Button
-                                variant="outline"
-                                className="hidden h-8 w-8 p-0 lg:flex"
-                                onClick={() => table.setPageIndex(0)}
-                                disabled={!table.getCanPreviousPage()}
-                            >
-                                <span className="sr-only">Ir a la primer pagina</span>
-                                <IconChevronsLeft />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="size-8"
-                                size="icon"
-                                onClick={() => table.previousPage()}
-                                disabled={!table.getCanPreviousPage()}
-                            >
-                                <span className="sr-only">Ir a la pagina previa</span>
-                                <IconChevronLeft />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="size-8"
-                                size="icon"
-                                onClick={() => table.nextPage()}
-                                disabled={!table.getCanNextPage()}
-                            >
-                                <span className="sr-only">Ir a la proxima pagina</span>
-                                <IconChevronRight />
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="hidden size-8 lg:flex"
-                                size="icon"
-                                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                                disabled={!table.getCanNextPage()}
-                            >
-                                <span className="sr-only">Ir a la ultima pagina</span>
-                                <IconChevronsRight />
-                            </Button>
-                        </div>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                    Sin resultados.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            <div className="flex items-center justify-between px-4 mt-4">
+                <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
+                    {table.getFilteredRowModel().rows.length} fila(s) total.
+                </div>
+                <div className="flex w-full items-center gap-8 lg:w-fit">
+                    <div className="hidden items-center gap-2 lg:flex">
+                        <Label htmlFor="rows-per-page" className="text-sm font-medium">
+                            Filas por página
+                        </Label>
+                        <Select
+                            value={`${table.getState().pagination.pageSize}`}
+                            onValueChange={(value) => {
+                                table.setPageSize(Number(value));
+                            }}
+                        >
+                            <SelectTrigger size="sm" className="w-20" id="rows-per-page">
+                                <SelectValue placeholder={table.getState().pagination.pageSize} />
+                            </SelectTrigger>
+                            <SelectContent side="top">
+                                {[10, 20, 30, 40, 50].map((pageSize) => (
+                                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                                        {pageSize}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="flex w-fit items-center justify-center text-sm font-medium">
+                        Pagina {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                    </div>
+                    <div className="ml-auto flex items-center gap-2 lg:ml-0">
+                        <Button
+                            variant="outline"
+                            className="hidden h-8 w-8 p-0 lg:flex"
+                            onClick={() => table.setPageIndex(0)}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            <span className="sr-only">Ir a la primer pagina</span>
+                            <IconChevronsLeft />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="size-8"
+                            size="icon"
+                            onClick={() => table.previousPage()}
+                            disabled={!table.getCanPreviousPage()}
+                        >
+                            <span className="sr-only">Ir a la pagina previa</span>
+                            <IconChevronLeft />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="size-8"
+                            size="icon"
+                            onClick={() => table.nextPage()}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            <span className="sr-only">Ir a la proxima pagina</span>
+                            <IconChevronRight />
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="hidden size-8 lg:flex"
+                            size="icon"
+                            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                            disabled={!table.getCanNextPage()}
+                        >
+                            <span className="sr-only">Ir a la ultima pagina</span>
+                            <IconChevronsRight />
+                        </Button>
                     </div>
                 </div>
-            </TabsContent>
-            <TabsContent value="past-performance" className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-            </TabsContent>
-            <TabsContent value="key-personnel" className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-            </TabsContent>
-            <TabsContent value="focus-documents" className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-            </TabsContent>
-        </Tabs>
+            </div>
+        </div>
     );
-}
-
-const chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-    desktop: {
-        label: 'Desktop',
-        color: 'var(--primary)',
-    },
-    mobile: {
-        label: 'Mobile',
-        color: 'var(--primary)',
-    },
-} satisfies ChartConfig;
-
-function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-    const isMobile = useIsMobile();
-
-    function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-        const isMobile = useIsMobile();
-
-        return (
-            <Drawer direction={isMobile ? 'bottom' : 'right'}>
-                <DrawerTrigger asChild>
-                    {/* <Button variant="link" className="w-fit px-0 text-left text-foreground">
-                        {item.} {item.modelo}
-                    </Button> */}
-                </DrawerTrigger>
-
-                <DrawerContent>
-                    <DrawerHeader className="gap-1">
-                        <DrawerTitle>
-                            Gastos corrientes
-                        </DrawerTitle>
-                        <DrawerDescription>Detalles de la venta</DrawerDescription>
-                    </DrawerHeader>
-
-                    <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-                        <form className="flex flex-col gap-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`dominio-${item.id}`}>Dominio</Label>
-                                    <Input id={`dominio-${item.id}`} defaultValue={item.dominio ?? ''} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`operador-${item.id}`}>Operador</Label>
-                                    <Input id={`operador-${item.id}`} defaultValue={item.operador} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`tipo_gasto-${item.id}`}>Motivo</Label>
-                                    <Input id={`tipo_gasto-${item.id}`} defaultValue={item.tipo_gasto ?? ''} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`descripcion-${item.id}`}>Descripcion</Label>
-                                    <Input id={`descripcion-${item.id}`} defaultValue={item.descripcion ?? ''} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`importe_ars-${item.id}`}>Importe ARS</Label>
-                                    <Input id={`importe_ars-${item.id}`} defaultValue={item.importe_ars ?? ''} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`importe_usd-${item.id}`}>Importe USD</Label>
-                                    <Input id={`importe_usd-${item.id}`} defaultValue={item.importe_usd ?? ''} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`fecha-${item.id}`}>Fecha gasto</Label>
-                                    <Input id={`fecha-${item.id}`} defaultValue={item.fecha ?? ''} />
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                    <DrawerFooter>
-                        <Button>Guardar</Button>
-                        <DrawerClose asChild>
-                            <Button variant="outline">Cerrar</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-        );
-    }
 }

@@ -78,43 +78,111 @@ export default function AddVentaModal({ onVentaCreada }: AddVentaModalProps) {
                         Registrar Venta
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Ingrese los datos de la venta</DialogTitle>
                     </DialogHeader>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
-                            {[
-                                { name: 'dniCliente', label: 'DNI del Cliente', required: true },
-                                { name: 'dominio', label: 'Dominio', required: true },
-                                { name: 'procedencia', label: 'Procedencia', required: true },
-                                { name: 'valor_venta_ars', label: 'Valor de Venta (ARS)', type: 'number', required: true },
-                                { name: 'valor_venta_usd', label: 'Valor de Venta (USD)', type: 'number', required: true },
-                                { name: 'fecha_venta', label: 'Fecha de Venta', type: 'date', required: true },
-                            ].map((field) => (
-                                <FormField
-                                    key={field.name}
-                                    control={form.control}
-                                    name={field.name as keyof Venta}
-                                    render={({ field: hookField }) => (
-                                        <FormItem>
-                                            <FormLabel>{field.label}</FormLabel>
-                                            <FormControl>
-                                                <Input {...hookField} type={field.type ?? 'text'} required={field.required} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            ))}
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 py-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Columna izquierda */}
+                                <div className="space-y-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="dniCliente"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>DNI del Cliente *</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} type="text" required />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
 
-                            {/* Select de empleados */}
+                                    <FormField
+                                        control={form.control}
+                                        name="dominio"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Dominio *</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} type="text" required />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="procedencia"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Procedencia *</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} type="text" required />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                {/* Columna derecha */}
+                                <div className="space-y-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="valor_venta_ars"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Valor de Venta (ARS) *</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} type="number" required />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="valor_venta_usd"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Valor de Venta (USD) *</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} type="number" required />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="fecha_venta"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Fecha de Venta *</FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} type="date" required />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Vendedor - ocupa todo el ancho */}
                             <FormField
                                 control={form.control}
                                 name="vendedor"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Vendedor</FormLabel>
+                                        <FormLabel>Vendedor *</FormLabel>
                                         <FormControl>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                 <SelectTrigger className="w-full">
@@ -134,7 +202,7 @@ export default function AddVentaModal({ onVentaCreada }: AddVentaModalProps) {
                                 )}
                             />
 
-                            <div className="flex w-full justify-between gap-2 pt-2">
+                            <div className="flex w-full justify-between gap-2 pt-4 border-t">
                                 <DialogClose asChild>
                                     <Button variant="outline">Cancelar</Button>
                                 </DialogClose>

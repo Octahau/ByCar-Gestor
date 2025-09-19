@@ -1,21 +1,25 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Cliente } from '@/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Cliente, TipoCliente } from '@/types';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { IconPlus } from '@tabler/icons-react';
 
 interface AddClienteModalProps {
     onClienteCreado: (cliente: Cliente) => void;
     open?: boolean; // control externo
     onOpenChange?: (open: boolean) => void; // control externo
+    trigger?: React.ReactNode; // trigger personalizado
 }
 
-export default function AddClienteModal({ onClienteCreado, open, onOpenChange }: AddClienteModalProps) {
+export default function AddClienteModal({ onClienteCreado, open, onOpenChange, trigger }: AddClienteModalProps) {
     const form = useForm<Cliente>({
-        defaultValues: { dni: '', nombre: '', telefono: '', email: '' },
+        defaultValues: { dni: '', nombre: '', telefono: '', email: '', tipo: 'interesado', observaciones: '' },
     });
 
     const onSubmit = async (data: Cliente) => {
@@ -49,33 +53,117 @@ export default function AddClienteModal({ onClienteCreado, open, onOpenChange }:
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
+            {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
             <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Ingrese los datos del cliente</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
-                        {[
-                            { name: 'nombre', label: 'Nombre', type: 'text', required: true },
-                            { name: 'dni', label: 'DNI', type: 'text', required: true },
-                            { name: 'telefono', label: 'Teléfono', type: 'text', required: false },
-                            { name: 'email', label: 'Email', type: 'email', required: false },
-                        ].map((field) => (
-                            <FormField
-                                key={field.name}
-                                control={form.control}
-                                name={field.name as keyof Cliente}
-                                render={({ field: hookField }) => (
-                                    <FormItem>
-                                        <FormLabel>{field.label}</FormLabel>
-                                        <FormControl>
-                                            <Input {...hookField} type={field.type ?? 'text'} required={field.required} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        ))}
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Columna izquierda */}
+                            <div className="space-y-4">
+                                <FormField
+                                    control={form.control}
+                                    name="nombre"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nombre *</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="text" required />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="dni"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>DNI *</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="text" required />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="telefono"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Teléfono</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="text" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
+                            {/* Columna derecha */}
+                            <div className="space-y-4">
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="email" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="tipo"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Tipo *</FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <SelectTrigger className="w-full">
+                                                        <SelectValue placeholder="Seleccione un tipo" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="interesado">Interesado</SelectItem>
+                                                        <SelectItem value="comprador">Comprador</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Observaciones - ocupa todo el ancho */}
+                        <FormField
+                            control={form.control}
+                            name="observaciones"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Observaciones</FormLabel>
+                                    <FormControl>
+                                        <Textarea 
+                                            {...field} 
+                                            placeholder="Ingrese observaciones adicionales sobre el cliente..."
+                                            className="min-h-[80px]"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <div className="flex w-full justify-between gap-2 pt-2">
                             <DialogClose asChild>

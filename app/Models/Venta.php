@@ -10,6 +10,7 @@ class Venta extends Model
     use HasFactory;
 
     protected $table = 'ventas';
+
     protected $primaryKey = 'venta_id';
 
     protected $fillable = [
@@ -34,9 +35,16 @@ class Venta extends Model
     {
         return $this->belongsTo(Vehiculo::class, 'vehiculo_id', 'vehiculo_id');
     }
+
     // Relación: una venta pertenece a un usuario
     public function user()
     {
         return $this->belongsTo(User::class, 'usuario_id', 'id');
+    }
+
+    // Relación: una venta pertenece a un cliente
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id', 'cliente_id');
     }
 }

@@ -1,25 +1,10 @@
 import {
-    closestCenter,
-    DndContext,
-    KeyboardSensor,
-    MouseSensor,
-    TouchSensor,
-    useSensor,
-    useSensors,
-    type DragEndEvent,
-    type UniqueIdentifier,
-} from '@dnd-kit/core';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
     IconChevronDown,
     IconChevronLeft,
     IconChevronRight,
     IconChevronsLeft,
     IconChevronsRight,
     IconDotsVertical,
-    IconGripVertical,
     IconLayoutColumns,
 } from '@tabler/icons-react';
 import {
@@ -32,7 +17,6 @@ import {
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
-    Row,
     SortingState,
     useReactTable,
     VisibilityState,
@@ -42,18 +26,6 @@ import { z } from 'zod';
 import { format, parseISO } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
-import { ChartConfig } from '@/components/ui/chart';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from '@/components/ui/drawer';
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -62,12 +34,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
-import { useIsMobile } from '@/hooks/use-mobile';
+import DeleteModal from '@/components/delete-modal';
+import EditVehiculoModal from './edit-modal';
+import VehiculoInfoModal from './info-modal';
+import toast from 'react-hot-toast';
 
 export const schema = z.object({
     id: z.number(),
@@ -79,50 +52,16 @@ export const schema = z.object({
     kilometraje: z.number().optional(),
     precioARS: z.number().optional(),
     precioUSD: z.number().optional(),
+    precio_venta_sugerido_ars: z.number().optional(),
+    precio_venta_sugerido_usd: z.number().optional(),
     ubicacion: z.string().optional(),
     fecha: z.string().optional(),
+    infoAuto: z.string().optional(),
     estado: z.string().optional(),
+    tipo: z.string().optional(),
 });
 
-// Create a separate component for the drag handle
-function DragHandle({ id }: { id: number }) {
-    const { attributes, listeners } = useSortable({
-        id,
-    });
-
-    return (
-        <Button {...attributes} {...listeners} variant="ghost" size="icon" className="size-7 text-muted-foreground hover:bg-transparent">
-            <IconGripVertical className="size-3 text-muted-foreground" />
-            <span className="sr-only">Drag to reorder</span>
-        </Button>
-    );
-}
-
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
-    {
-        id: 'drag',
-        header: () => null,
-        cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
-    {
-        id: 'select',
-        header: ({ table }) => (
-            <div className="flex items-center justify-center">
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            </div>
-        ),
-        cell: ({ row }) => (
-            <div className="flex items-center justify-center">
-                <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />
-            </div>
-        ),
-        enableSorting: false,
-        enableHiding: false,
-    },
     { accessorKey: 'marca', header: 'Marca' },
     { accessorKey: 'modelo', header: 'Modelo' },
     { accessorKey: 'dominio', header: 'Dominio' },
@@ -131,6 +70,22 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     { accessorKey: 'kilometraje', header: 'Kilometraje' },
     { accessorKey: 'precioARS', header: 'Precio ARS' },
     { accessorKey: 'precioUSD', header: 'Precio USD' },
+    { 
+        accessorKey: 'precio_venta_sugerido_ars', 
+        header: 'Precio Venta Sugerido ARS',
+        cell: ({ getValue }) => {
+            const value = getValue<number>();
+            return value ? `$${value.toLocaleString()}` : '-';
+        }
+    },
+    { 
+        accessorKey: 'precio_venta_sugerido_usd', 
+        header: 'Precio Venta Sugerido USD',
+        cell: ({ getValue }) => {
+            const value = getValue<number>();
+            return value ? `$${value.toLocaleString()}` : '-';
+        }
+    },
     { accessorKey: 'ubicacion', header: 'Ubicación' },
     {
         accessorKey: 'fecha',
@@ -149,10 +104,67 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
             }
         },
     },
+    { 
+        accessorKey: 'tipo', 
+        header: 'Tipo',
+        cell: ({ getValue }) => {
+            const tipo = getValue<string>();
+            return tipo === 'camioneta' ? 'Camioneta' : 'Auto';
+        }
+    },
     { accessorKey: 'estado', header: 'Estado' },
     {
         id: 'actions',
-        cell: () => (
+        cell: ({ row }) => <ActionsCell row={row} />,
+    },
+];
+
+// Componente para las acciones de cada fila
+function ActionsCell({ row }: { row: any }) {
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+    const [isInfoModalOpen, setIsInfoModalOpen] = React.useState(false);
+    const [isDeleting, setIsDeleting] = React.useState(false);
+    const vehiculo = row.original;
+
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const response = await fetch(`/vehiculos/${vehiculo.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': csrfToken || '',
+                },
+            });
+
+            const result = await response.json();
+            
+            if (result.success) {
+                toast.success('Vehículo eliminado correctamente');
+                // Recargar la página para actualizar la lista
+                window.location.reload();
+            } else {
+                toast.error('Error al eliminar vehículo: ' + (result.message || ''));
+            }
+        } catch (error) {
+            console.error('Error al eliminar vehículo:', error);
+            toast.error('Error al eliminar vehículo');
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+        }
+    };
+
+    const handleVehiculoActualizado = (vehiculoActualizado: any) => {
+        // Recargar la página para actualizar la lista con los cambios
+        window.location.reload();
+    };
+
+    return (
+        <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="size-8" size="icon">
@@ -161,36 +173,45 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem>Informacion</DropdownMenuItem>
-                    <DropdownMenuItem>Marcar como favorito</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsInfoModalOpen(true)}>
+                        Información
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsEditModalOpen(true)}>
+                        Editar
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
+                    <DropdownMenuItem 
+                        variant="destructive"
+                        onClick={() => setIsDeleteModalOpen(true)}
+                    >
+                        Eliminar
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-    },
-];
 
-function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
-    const { transform, transition, setNodeRef, isDragging } = useSortable({
-        id: row.original.id,
-    });
+            <DeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDelete}
+                title="Eliminar vehículo"
+                description="¿Estás seguro de que quieres eliminar este vehículo? Esta acción no se puede deshacer."
+                itemName={`${vehiculo.marca} ${vehiculo.modelo} - ${vehiculo.dominio}`}
+                isLoading={isDeleting}
+            />
 
-    return (
-        <TableRow
-            data-state={row.getIsSelected() && 'selected'}
-            data-dragging={isDragging}
-            ref={setNodeRef}
-            className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-            style={{
-                transform: CSS.Transform.toString(transform),
-                transition: transition,
-            }}
-        >
-            {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-            ))}
-        </TableRow>
+            <EditVehiculoModal
+                vehiculo={vehiculo}
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                onVehiculoActualizado={handleVehiculoActualizado}
+            />
+
+            <VehiculoInfoModal
+                vehiculo={vehiculo}
+                isOpen={isInfoModalOpen}
+                onClose={() => setIsInfoModalOpen(false)}
+            />
+        </>
     );
 }
 
@@ -201,18 +222,17 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
         if (initialData) setData(initialData);
     }, [initialData]);
 
-    const [rowSelection, setRowSelection] = React.useState({});
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+        color: false,
+        precioUSD: false,
+        precio_venta_sugerido_usd: false,
+    });
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [pagination, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    const sortableId = React.useId();
-    const sensors = useSensors(useSensor(MouseSensor, {}), useSensor(TouchSensor, {}), useSensor(KeyboardSensor, {}));
-
-    const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
     const table = useReactTable({
         data,
@@ -220,13 +240,10 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
         state: {
             sorting,
             columnVisibility,
-            rowSelection,
             columnFilters,
             pagination,
         },
         getRowId: (row) => row.id.toString(),
-        enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
@@ -239,44 +256,9 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
         getFacetedUniqueValues: getFacetedUniqueValues(),
     });
 
-    function handleDragEnd(event: DragEndEvent) {
-        const { active, over } = event;
-        if (active && over && active.id !== over.id) {
-            setData((data) => {
-                const oldIndex = dataIds.indexOf(active.id);
-                const newIndex = dataIds.indexOf(over.id);
-                return arrayMove(data, oldIndex, newIndex);
-            });
-        }
-    }
-
     return (
-        <Tabs defaultValue="outline" className="w-full flex-col justify-start gap-6">
-            <div className="flex items-center justify-between px-4 lg:px-6">
-                <Label htmlFor="view-selector" className="sr-only">
-                    View
-                </Label>
-                {/* <Select defaultValue="outline">
-                    <SelectTrigger className="flex w-fit @4xl/main:hidden" size="sm" id="view-selector">
-                        <SelectValue placeholder="Select a view" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="outline">Outline</SelectItem>
-                        <SelectItem value="past-performance">Past Performance</SelectItem>
-                        <SelectItem value="key-personnel">Key Personnel</SelectItem>
-                        <SelectItem value="focus-documents">Focus Documents</SelectItem>
-                    </SelectContent>
-                </Select>
-                <TabsList className="hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:bg-muted-foreground/30 **:data-[slot=badge]:px-1 @4xl/main:flex">
-                    <TabsTrigger value="outline">Outline</TabsTrigger>
-                    <TabsTrigger value="past-performance">
-                        Past Performance <Badge variant="secondary">3</Badge>
-                    </TabsTrigger>
-                    <TabsTrigger value="key-personnel">
-                        Key Personnel <Badge variant="secondary">2</Badge>
-                    </TabsTrigger>
-                    <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
-                </TabsList> */}
+        <div className="w-full flex-col justify-start gap-6">
+            <div className="flex items-center justify-between px-4 lg:px-6 mb-6">
                 <div className="flex items-center gap-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -305,57 +287,46 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    {/*  <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Add Section</span>
-          </Button> */}
                 </div>
             </div>
-            <TabsContent value="outline" className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
+            <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6">
                 <div className="overflow-hidden rounded-lg border">
-                    <DndContext
-                        collisionDetection={closestCenter}
-                        modifiers={[restrictToVerticalAxis]}
-                        onDragEnd={handleDragEnd}
-                        sensors={sensors}
-                        id={sortableId}
-                    >
-                        <Table>
-                            <TableHeader className="sticky top-0 z-10 bg-muted">
-                                {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id}>
-                                        {headerGroup.headers.map((header) => {
-                                            return (
-                                                <TableHead key={header.id} colSpan={header.colSpan}>
-                                                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                                                </TableHead>
-                                            );
-                                        })}
-                                    </TableRow>
-                                ))}
-                            </TableHeader>
-                            <TableBody className="**:data-[slot=table-cell]:first:w-8">
-                                {table.getRowModel().rows?.length ? (
-                                    <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-                                        {table.getRowModel().rows.map((row) => (
-                                            <DraggableRow key={row.id} row={row} />
+                    <Table>
+                        <TableHeader className="sticky top-0 z-10 bg-muted">
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <TableRow key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => {
+                                        return (
+                                            <TableHead key={header.id} colSpan={header.colSpan}>
+                                                {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                            </TableHead>
+                                        );
+                                    })}
+                                </TableRow>
+                            ))}
+                        </TableHeader>
+                        <TableBody>
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow key={row.id}>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
                                         ))}
-                                    </SortableContext>
-                                ) : (
-                                    <TableRow>
-                                        <TableCell colSpan={columns.length} className="h-24 text-center">
-                                            Sin resultados.
-                                        </TableCell>
                                     </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </DndContext>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                                        Sin resultados.
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
                 </div>
                 <div className="flex items-center justify-between px-4">
-                    <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
-                        {table.getFilteredSelectedRowModel().rows.length} de {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
-                    </div>
                     <div className="flex w-full items-center gap-8 lg:w-fit">
                         <div className="hidden items-center gap-2 lg:flex">
                             <Label htmlFor="rows-per-page" className="text-sm font-medium">
@@ -425,122 +396,9 @@ export function DataTable({ data: initialData }: { data: z.infer<typeof schema>[
                         </div>
                     </div>
                 </div>
-            </TabsContent>
-            <TabsContent value="past-performance" className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-            </TabsContent>
-            <TabsContent value="key-personnel" className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-            </TabsContent>
-            <TabsContent value="focus-documents" className="flex flex-col px-4 lg:px-6">
-                <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-            </TabsContent>
-        </Tabs>
+            </div>
+        </div>
     );
 }
 
-const chartData = [
-    { month: 'January', desktop: 186, mobile: 80 },
-    { month: 'February', desktop: 305, mobile: 200 },
-    { month: 'March', desktop: 237, mobile: 120 },
-    { month: 'April', desktop: 73, mobile: 190 },
-    { month: 'May', desktop: 209, mobile: 130 },
-    { month: 'June', desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-    desktop: {
-        label: 'Desktop',
-        color: 'var(--primary)',
-    },
-    mobile: {
-        label: 'Mobile',
-        color: 'var(--primary)',
-    },
-} satisfies ChartConfig;
-
-function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-    const isMobile = useIsMobile();
-
-    function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-        const isMobile = useIsMobile();
-
-        return (
-            <Drawer direction={isMobile ? 'bottom' : 'right'}>
-                <DrawerTrigger asChild>
-                    <Button variant="link" className="w-fit px-0 text-left text-foreground">
-                        {item.marca} {item.modelo}
-                    </Button>
-                </DrawerTrigger>
-
-                <DrawerContent>
-                    <DrawerHeader className="gap-1">
-                        <DrawerTitle>
-                            {item.marca} {item.modelo}
-                        </DrawerTitle>
-                        <DrawerDescription>Detalles del vehículo seleccionado</DrawerDescription>
-                    </DrawerHeader>
-
-                    <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-                        <form className="flex flex-col gap-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`marca-${item.id}`}>Marca</Label>
-                                    <Input id={`marca-${item.id}`} defaultValue={item.marca} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`modelo-${item.id}`}>Modelo</Label>
-                                    <Input id={`modelo-${item.id}`} defaultValue={item.modelo} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`dominio-${item.id}`}>Dominio</Label>
-                                    <Input id={`dominio-${item.id}`} defaultValue={item.dominio} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`anio-${item.id}`}>Año</Label>
-                                    <Input id={`anio-${item.id}`} defaultValue={item.anio} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`color-${item.id}`}>Color</Label>
-                                    <Input id={`color-${item.id}`} defaultValue={item.color} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`kilometraje-${item.id}`}>Kilometraje</Label>
-                                    <Input id={`kilometraje-${item.id}`} defaultValue={item.kilometraje} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`precioARS-${item.id}`}>Precio ARS</Label>
-                                    <Input id={`precioARS-${item.id}`} defaultValue={item.precioARS} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`precioUSD-${item.id}`}>Precio USD</Label>
-                                    <Input id={`precioUSD-${item.id}`} defaultValue={item.precioUSD} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`ubicacion-${item.id}`}>Ubicacion</Label>
-                                    <Input id={`ubicacion-${item.id}`} defaultValue={item.ubicacion} />
-                                </div>
-
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`fecha-${item.id}`}>Fecha adquisicion</Label>
-                                    <Input id={`fecha-${item.id}`} defaultValue={item.fecha} />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <Label htmlFor={`estado-${item.id}`}>Estado</Label>
-                                    <Input id={`estado-${item.id}`} defaultValue={item.estado} />
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <DrawerFooter>
-                        <Button>Guardar</Button>
-                        <DrawerClose asChild>
-                            <Button variant="outline">Cerrar</Button>
-                        </DrawerClose>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
-        );
-    }
-}
 

@@ -55,20 +55,30 @@ export type Vehiculo = {
     kilometraje: number;
     precioARS: number;
     precioUSD: number;
+    precio_venta_sugerido_ars?: number;
+    precio_venta_sugerido_usd?: number;
     ubicacion: string;
     fecha: string;
     infoAuto: string;
+    estado: string;
+    tipo: 'auto' | 'camioneta';
+    gastos_acumulados_ars?: number;
+    gastos_acumulados_usd?: number;
 };
 // export interface BreadcrumbItem {
 //     title: string;
 //     href?: string;
 // }
+export type TipoCliente = 'interesado' | 'comprador';
+
 export type Cliente = {
     id: number;
     dni: string;
     nombre: string;
     telefono: string;
     email: string;
+    tipo: TipoCliente;
+    observaciones?: string;
 }
 
 export type Venta = {
@@ -95,8 +105,8 @@ export type VentaTable ={
     vendedor: string;
 }
 export type  GastoCorriente = {
-    operador: string;
-    motivo: string;
+    usuario_id: number;
+    item: string;
     descripcion: string;
     importe: number;
     fondo: string;
@@ -104,8 +114,8 @@ export type  GastoCorriente = {
 }
 export type  GastoCorrienteTable = {
     id: number ;
-    operador: string;
-    motivo: string;
+    operador: string; // Nombre del usuario obtenido de la relación
+    item: string;
     descripcion: string;
     importe: number;
     fondo: string;
@@ -122,12 +132,12 @@ export type GastoVehiculo = {
 }
 
 export type GastoVehiculoTable = {
-    id: number ;
-    dominio: string;
+    id: number;
+    dominio: string | null;
     operador: string;
-    tipo_gasto: string;
-    descripcion: string;
-    importe_ars: number;
-    importe_usd: number;
-    fecha: string;
+    tipo_gasto: string | null;
+    descripcion: string | null;
+    importe_ars: number | null;
+    importe_usd: number | null;
+    fecha: string | null;
 }

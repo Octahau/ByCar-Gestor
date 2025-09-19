@@ -21,11 +21,11 @@ export default function AddGastoCorrienteModal({ onGastoCreado, open, onOpenChan
 
     const form = useForm<GastoCorriente>({
         defaultValues: {
-            operador: '',
-            motivo: '',
+            usuario_id: 0,
+            item: '',
             descripcion: '',
             importe: 0,
-            fondo: '',
+            fondo: 'general',
             fecha: '',
         },
     });
@@ -82,7 +82,7 @@ export default function AddGastoCorrienteModal({ onGastoCreado, open, onOpenChan
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
                         {[
-                            { name: 'motivo', label: 'Motivo', type: 'text', required: true },
+                            { name: 'item', label: 'Motivo', type: 'text', required: true },
                             { name: 'descripcion', label: 'Descripción', type: 'text', required: true },
                             { name: 'importe', label: 'Importe', type: 'number', required: true },
                             { name: 'fondo', label: 'Fondo', type: 'text', required: true },
@@ -106,12 +106,12 @@ export default function AddGastoCorrienteModal({ onGastoCreado, open, onOpenChan
                         {/* Select de empleados */}
                         <FormField
                             control={form.control}
-                            name="operador"
+                            name="usuario_id"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Operador</FormLabel>
                                     <FormControl>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={String(field.value)}>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Seleccione un operador" />
                                             </SelectTrigger>

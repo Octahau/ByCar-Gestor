@@ -1,27 +1,28 @@
 'use client';
 import { DataTable } from '@/components/gasto-vehiculo/gastos-table';
 import AddGastoVehiculoModal from '@/components/gasto-vehiculo/gastos-vehiculos-modal';
-import FiltrosModal from '@/components/vehicles/modal-filtros';
+import DateFilter from '@/components/vehicles/date-filter';
 import AppLayout from '@/layouts/app-layout';
 import { GastoVehiculoTable } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { DateRange } from 'react-day-picker';
 
 export default function GastosVehiculos() {
-    const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleVentaCreada = (gastos: GastoVehiculoTable) => {
-        console.log('Venta registrada:', gastos);
-        setGastos((prev) => [...prev, gastos]); // ahora TypeScript ya no se queja
-        setMostrarFormulario(false);
-    };
+    const [searchTerm, setSearchTerm] = useState('');
+    const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
     const { props } = usePage<{ gastos?: GastoVehiculoTable[] }>();
     const [gastos, setGastos] = useState<GastoVehiculoTable[]>(props.gastos ?? []);
     console.log(gastos);
     console.log(props);
+
+    const handleGastoActualizado = () => {
+        // Recargar la página para obtener los datos actualizados
+        window.location.reload();
+    };
 
     return (
         <AppLayout breadcrumbs={[{ title: 'Gastos Vehiculos', href: '/GastosVehiculos' }]}>
@@ -45,15 +46,35 @@ export default function GastosVehiculos() {
                         />
                     </div>
 
-                    <div className="mt-2 flex items-center gap-2 lg:mt-0">
-                        <FiltrosModal />
+                    <div className="mt-2 flex items-center gap-4 lg:mt-0">
                         <div className="relative w-full lg:w-64">
                             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                            <input type="text" placeholder="Buscar..." className="w-full rounded-md border px-10 py-2" />
+                            <input 
+                                type="text" 
+                                placeholder="Buscar por operador, motivo o dominio..." 
+                                className="w-full rounded-md border px-10 py-2"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
+
+                        {/* Filtro de fechas */}
+                        <div className="flex gap-2 w-full">
+                            <DateFilter 
+                                dateRange={dateRange} 
+                                onDateRangeChange={setDateRange} 
+                                placeholder="Filtrar por fecha de gasto" 
+                            />
+                        </div>
+                        
                     </div>
                 </div>
-                <DataTable data={gastos} />
+                <DataTable 
+                    data={gastos} 
+                    searchTerm={searchTerm} 
+                    dateRange={dateRange}
+                    onGastoActualizado={handleGastoActualizado} 
+                />
             </div>
         </AppLayout>
     );

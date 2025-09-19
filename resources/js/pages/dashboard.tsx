@@ -2,6 +2,8 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SectionCards } from '@/components/section-cards';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { DashboardCharts } from '@/components/dashboard-charts';
+import { GananciasCards } from '@/components/ganancias-cards';
 
 //import data from "../../../../../composer.lock"
 
@@ -29,6 +31,26 @@ export default function Page() {
                                 </h2>
                             </div>
                             <SectionCards />
+                            
+                            {/* Gráficas de evolución */}
+                            <div className="mt-8">
+                                <div className="px-4 lg:px-6">
+                                    <h2 className="mb-6 text-lg font-semibold">
+                                        Evolución Histórica
+                                    </h2>
+                                </div>
+                                <DashboardCharts />
+                            </div>
+                            
+                            {/* Cards de Ganancias */}
+                            <div className="mt-8">
+                                <div className="px-4 lg:px-6">
+                                    <h2 className="mb-6 text-lg font-semibold">
+                                        Resumen de Ganancias
+                                    </h2>
+                                </div>
+                                <GananciasCards />
+                            </div>
                         </div>
                     </div>
                 </div>
