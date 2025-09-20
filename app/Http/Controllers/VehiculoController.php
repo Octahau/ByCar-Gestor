@@ -2,108 +2,65 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\EstadoVehiculo;
+use App\DTOs\ApiResponse;
+use App\Http\Requests\StoreVehiculoRequest;
+use App\Http\Requests\UpdateVehiculoRequest;
 use App\Models\Vehiculo;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use App\Repositories\Contracts\VehiculoRepositoryInterface;
 use Inertia\Inertia;
 
 class VehiculoController extends Controller
 {
+    public function __construct(
+        private VehiculoRepositoryInterface $vehiculoRepository
+    ) {}
+
     /*
      * Store a newly created vehicle in storage.
      */
-    public function store(Request $request)
+    public function store(StoreVehiculoRequest $request)
     {
-        logger('Datos recibidos:', $request->all());
-
-        $datos = [
-            'marca' => $request->input('marca'),
-            'modelo' => $request->input('modelo'),
-            'dominio' => $request->input('dominio'),
-            'anio' => $request->input('anio'),
-            'color' => $request->input('color'),
-            'kilometraje' => $request->input('kilometraje'),
-            'precioARS' => $request->input('precioARS'),
-            'precioUSD' => $request->input('precioUSD'),
-            'precio_venta_sugerido_ars' => $request->input('precio_venta_sugerido_ars'),
-            'precio_venta_sugerido_usd' => $request->input('precio_venta_sugerido_usd'),
-            'ubicacion' => $request->input('ubicacion'),
-            'fecha' => $request->input('fecha'),
-            'infoAuto' => $request->input('infoAuto'),
-            'tipo' => $request->input('tipo'),
-        ];
-
         try {
-            $validated = Validator::make($datos, [
-                'marca' => 'nullable|string|max:255',
-                'modelo' => 'nullable|string|max:255',
-                'dominio' => 'nullable|string|max:255|unique:vehiculos,dominio',
-                'anio' => 'nullable|integer|min:1900|max:'.date('Y'),
-                'color' => 'nullable|string|max:50',
-                'kilometraje' => 'nullable|numeric|min:0',
-                'precioARS' => 'nullable|numeric|min:0',
-                'precioUSD' => 'nullable|numeric|min:0',
-                'precio_venta_sugerido_ars' => 'nullable|numeric|min:0',
-                'precio_venta_sugerido_usd' => 'nullable|numeric|min:0',
-                'ubicacion' => 'nullable|string|max:255',
-                'fecha' => 'nullable|date',
-                'infoAuto' => 'nullable|string|max:255',
-                'tipo' => 'nullable|string|in:auto,camioneta',
-            ])->validate();
+            $data = $request->validated();
+            $data['estado'] = \App\Enums\EstadoVehiculo::DISPONIBLE->value;
 
-            if (Vehiculo::where('dominio', $datos['dominio'])->exists()) {
-                return response()->json([
-                    'success' => false,
-                    'error' => 'Ya existe un vehículo con ese dominio.',
-                ], 400);
-            }
+            $vehiculo = $this->vehiculoRepository->create($data);
 
-            $validated['estado'] = EstadoVehiculo::DISPONIBLE->value;
-
-            $vehiculo = Vehiculo::create($validated);
+            $formattedVehiculo = [
+                'id' => $vehiculo->vehiculo_id,
+                'marca' => $vehiculo->marca,
+                'modelo' => $vehiculo->modelo,
+                'dominio' => $vehiculo->dominio,
+                'anio' => (int) $vehiculo->anio,
+                'color' => $vehiculo->color,
+                'kilometraje' => (int) $vehiculo->kilometraje,
+                'precioARS' => (int) $vehiculo->precioARS,
+                'precioUSD' => (int) $vehiculo->precioUSD,
+                'precio_venta_sugerido_ars' => $vehiculo->precio_venta_sugerido_ars ? (float) $vehiculo->precio_venta_sugerido_ars : null,
+                'precio_venta_sugerido_usd' => $vehiculo->precio_venta_sugerido_usd ? (float) $vehiculo->precio_venta_sugerido_usd : null,
+                'ubicacion' => $vehiculo->ubicacion,
+                'fecha' => $vehiculo->fecha,
+                'infoAuto' => $vehiculo->infoAuto,
+                'estado' => $vehiculo->estado,
+                'tipo' => $vehiculo->tipo?->value ?? 'auto',
+            ];
 
             return response()->json([
                 'success' => true,
-                'vehiculo' => [
-                    'id' => $vehiculo->vehiculo_id,
-                    'marca' => $vehiculo->marca,
-                    'modelo' => $vehiculo->modelo,
-                    'dominio' => $vehiculo->dominio,
-                    'anio' => (int) $vehiculo->anio,
-                    'color' => $vehiculo->color,
-                    'kilometraje' => (int) $vehiculo->kilometraje,
-                    'precioARS' => (int) $vehiculo->precioARS,
-                    'precioUSD' => (int) $vehiculo->precioUSD,
-                    'precio_venta_sugerido_ars' => $vehiculo->precio_venta_sugerido_ars ? (float) $vehiculo->precio_venta_sugerido_ars : null,
-                    'precio_venta_sugerido_usd' => $vehiculo->precio_venta_sugerido_usd ? (float) $vehiculo->precio_venta_sugerido_usd : null,
-                    'ubicacion' => $vehiculo->ubicacion,
-                    'fecha' => $vehiculo->fecha,
-                    'infoAuto' => $vehiculo->infoAuto,
-                    'estado' => $vehiculo->estado,
-                    'tipo' => $vehiculo->tipo?->value ?? 'auto',
-                ],
+                'vehiculo' => $formattedVehiculo,
+                'message' => 'Vehículo creado correctamente',
             ]);
-
-        } catch (QueryException $e) {
-            logger('Error DB: ', ['message' => $e->getMessage()]);
-
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         } catch (\Exception $e) {
-            logger('Error general: ', ['message' => $e->getMessage()]);
-
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return ApiResponse::error('Error al crear vehículo: '.$e->getMessage());
         }
     }
 
     /**
      * Display a listing of the vehicles.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $vehiculos = Vehiculo::with('gastos')->get();
+        $vehiculos = $this->vehiculoRepository->getConGastos();
 
         $formatted = $vehiculos->map(function ($v) {
             // Calcular gastos acumulados
@@ -111,7 +68,7 @@ class VehiculoController extends Controller
             $gastosUsd = $v->gastos->sum('importe_usd') ?? 0;
 
             return [
-                'id' => $v->vehiculo_id, // asegurate que la columna se llama "id" en la tabla
+                'id' => $v->vehiculo_id,
                 'marca' => $v->marca,
                 'modelo' => $v->modelo,
                 'dominio' => $v->dominio,
@@ -174,30 +131,10 @@ class VehiculoController extends Controller
     /**
      * Update the specified vehicle in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateVehiculoRequest $request, $id)
     {
-        logger('Datos recibidos para actualizar:', $request->all());
-
-        $datos = [
-            'marca' => $request->input('marca'),
-            'modelo' => $request->input('modelo'),
-            'dominio' => $request->input('dominio'),
-            'anio' => $request->input('anio'),
-            'color' => $request->input('color'),
-            'kilometraje' => $request->input('kilometraje'),
-            'precioARS' => $request->input('precioARS'),
-            'precioUSD' => $request->input('precioUSD'),
-            'precio_venta_sugerido_ars' => $request->input('precio_venta_sugerido_ars'),
-            'precio_venta_sugerido_usd' => $request->input('precio_venta_sugerido_usd'),
-            'ubicacion' => $request->input('ubicacion'),
-            'fecha' => $request->input('fecha'),
-            'infoAuto' => $request->input('infoAuto'),
-            'estado' => $request->input('estado'),
-            'tipo' => $request->input('tipo'),
-        ];
-
         try {
-            $vehiculo = Vehiculo::where('vehiculo_id', $id)->first();
+            $vehiculo = $this->vehiculoRepository->findById($id);
 
             if (! $vehiculo) {
                 return response()->json([
@@ -206,62 +143,36 @@ class VehiculoController extends Controller
                 ], 404);
             }
 
-            $validated = Validator::make($datos, [
-                'marca' => 'nullable|string|max:255',
-                'modelo' => 'nullable|string|max:255',
-                'dominio' => 'nullable|string|max:255|unique:vehiculos,dominio,'.$vehiculo->vehiculo_id.',vehiculo_id',
-                'anio' => 'nullable|integer|min:1900|max:'.date('Y'),
-                'color' => 'nullable|string|max:50',
-                'kilometraje' => 'nullable|numeric|min:0',
-                'precioARS' => 'nullable|numeric|min:0',
-                'precioUSD' => 'nullable|numeric|min:0',
-                'precio_venta_sugerido_ars' => 'nullable|numeric|min:0',
-                'precio_venta_sugerido_usd' => 'nullable|numeric|min:0',
-                'ubicacion' => 'nullable|string|max:255',
-                'fecha' => 'nullable|date',
-                'infoAuto' => 'nullable|string|max:255',
-                'estado' => 'nullable|string|max:50',
-                'tipo' => 'nullable|string|in:auto,camioneta',
-            ])->validate();
+            $data = $request->validated();
+            $this->vehiculoRepository->update($vehiculo, $data);
 
-            $vehiculo->update($validated);
+            $updatedVehiculo = $this->vehiculoRepository->findById($id);
 
             return response()->json([
                 'success' => true,
                 'vehiculo' => [
-                    'id' => $vehiculo->vehiculo_id,
-                    'marca' => $vehiculo->marca,
-                    'modelo' => $vehiculo->modelo,
-                    'dominio' => $vehiculo->dominio,
-                    'anio' => (int) $vehiculo->anio,
-                    'color' => $vehiculo->color,
-                    'kilometraje' => (int) $vehiculo->kilometraje,
-                    'precioARS' => (int) $vehiculo->precioARS,
-                    'precioUSD' => (int) $vehiculo->precioUSD,
-                    'precio_venta_sugerido_ars' => $vehiculo->precio_venta_sugerido_ars ? (float) $vehiculo->precio_venta_sugerido_ars : null,
-                    'precio_venta_sugerido_usd' => $vehiculo->precio_venta_sugerido_usd ? (float) $vehiculo->precio_venta_sugerido_usd : null,
-                    'ubicacion' => $vehiculo->ubicacion,
-                    'fecha' => $vehiculo->fecha,
-                    'infoAuto' => $vehiculo->infoAuto,
-                    'estado' => $vehiculo->estado,
-                    'tipo' => $vehiculo->tipo?->value ?? 'auto',
+                    'id' => $updatedVehiculo->vehiculo_id,
+                    'marca' => $updatedVehiculo->marca,
+                    'modelo' => $updatedVehiculo->modelo,
+                    'dominio' => $updatedVehiculo->dominio,
+                    'anio' => (int) $updatedVehiculo->anio,
+                    'color' => $updatedVehiculo->color,
+                    'kilometraje' => (int) $updatedVehiculo->kilometraje,
+                    'precioARS' => (int) $updatedVehiculo->precioARS,
+                    'precioUSD' => (int) $updatedVehiculo->precioUSD,
+                    'precio_venta_sugerido_ars' => $updatedVehiculo->precio_venta_sugerido_ars ? (float) $updatedVehiculo->precio_venta_sugerido_ars : null,
+                    'precio_venta_sugerido_usd' => $updatedVehiculo->precio_venta_sugerido_usd ? (float) $updatedVehiculo->precio_venta_sugerido_usd : null,
+                    'ubicacion' => $updatedVehiculo->ubicacion,
+                    'fecha' => $updatedVehiculo->fecha,
+                    'infoAuto' => $updatedVehiculo->infoAuto,
+                    'estado' => $updatedVehiculo->estado,
+                    'tipo' => $updatedVehiculo->tipo?->value ?? 'auto',
                 ],
+                'message' => 'Vehículo actualizado correctamente',
             ]);
 
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (QueryException $e) {
-            logger('Error DB: ', ['message' => $e->getMessage()]);
-
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         } catch (\Exception $e) {
-            logger('Error general: ', ['message' => $e->getMessage()]);
-
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return ApiResponse::error('Error al actualizar vehículo: '.$e->getMessage());
         }
     }
 
@@ -280,6 +191,19 @@ class VehiculoController extends Controller
                 ], 404);
             }
 
+            // Verificar si el vehículo tiene ventas asociadas
+            $ventasCount = \App\Models\Venta::where('vehiculo_id', $vehiculo->vehiculo_id)->count();
+            if ($ventasCount > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se puede eliminar un vehículo que tiene ventas asociadas',
+                ], 400);
+            }
+
+            // Eliminar gastos asociados primero (por si acaso)
+            \App\Models\GastoVehiculo::where('vehiculo_id', $vehiculo->vehiculo_id)->delete();
+
+            // Eliminar el vehículo
             $vehiculo->delete();
 
             return response()->json([

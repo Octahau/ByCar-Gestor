@@ -1,6 +1,6 @@
-import { DataTable } from '@/components/vehicles/data-table';
-import AddVehiculoModal from '@/components/vehicles/modal-vehicle';
-import DateFilter from '@/components/vehicles/date-filter';
+import { DataTable } from '@/components/vehiculos/data-table';
+import AddVehiculoModal from '@/components/vehiculos/modal-vehicle';
+import DateFilter from '@/components/vehiculos/date-filter';
 import AppLayout from '@/layouts/app-layout';
 import { Vehiculo } from '@/types';
 import { Head, usePage } from '@inertiajs/react';

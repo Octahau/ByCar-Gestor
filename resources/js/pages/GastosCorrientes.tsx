@@ -7,7 +7,7 @@ import { Head, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import DateFilter from '@/components/vehicles/date-filter';
+import DateFilter from '@/components/vehiculos/date-filter';
 export default function GastosCorrientes() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');

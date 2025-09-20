@@ -60,7 +60,7 @@ export default function EditVehiculoModal({
                 precio_venta_sugerido_ars: vehiculo.precio_venta_sugerido_ars || 0,
                 precio_venta_sugerido_usd: vehiculo.precio_venta_sugerido_usd || 0,
                 ubicacion: vehiculo.ubicacion || '',
-                fecha: vehiculo.fecha || '',
+                fecha: vehiculo.fecha ? new Date(vehiculo.fecha).toISOString().split('T')[0] : '',
                 infoAuto: vehiculo.infoAuto || '',
                 estado: vehiculo.estado || '',
                 tipo: vehiculo.tipo || 'auto'

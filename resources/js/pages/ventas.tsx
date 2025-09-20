@@ -1,5 +1,5 @@
 'use client';
-import DateFilter from '@/components/vehicles/date-filter';
+import DateFilter from '@/components/vehiculos/date-filter';
 import { DataTable } from '@/components/ventas/data-table';
 import FiltrosModal from '@/components/ventas/filtros-modal';
 import AddVentaModal from '@/components/ventas/venta-modal';
@@ -42,7 +42,7 @@ export default function Ventas() {
                     </div>
 
                     {/* Derecha: buscador y filtros */}
-                    <div className="mb-4 flex w-max flex-col gap-2 pr-6">
+                    <div className="mb-4 flex w-full max-w-md flex-col gap-2 mr-1">
                         {/* Buscador */}
                         <div className="relative w-full">
                             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

@@ -85,6 +85,47 @@ class ClienteController extends Controller
         ]);
     }
 
+    public function show($id)
+    {
+        $cliente = Cliente::with(['ventas.vehiculo', 'ventas.user'])
+            ->where('cliente_id', $id)
+            ->firstOrFail();
+
+        $ventas = $cliente->ventas->map(function ($venta) {
+            return [
+                'venta_id' => $venta->venta_id,
+                'fecha' => $venta->fecha->format('d/m/Y'),
+                'vehiculo' => $venta->vehiculo ? [
+                    'marca' => $venta->vehiculo->marca,
+                    'modelo' => $venta->vehiculo->modelo,
+                    'dominio' => $venta->vehiculo->dominio,
+                    'anio' => $venta->vehiculo->anio,
+                ] : null,
+                'valor_venta_ars' => $venta->valor_venta_ars,
+                'valor_venta_usd' => $venta->valor_venta_usd,
+                'ganancia_real_ars' => $venta->ganancia_real_ars,
+                'vendedor' => $venta->vendedor,
+                'usuario' => $venta->user ? [
+                    'name' => $venta->user->name,
+                ] : null,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'cliente' => [
+                'id' => $cliente->cliente_id,
+                'nombre' => $cliente->nombre,
+                'dni' => $cliente->dni,
+                'email' => $cliente->email,
+                'telefono' => $cliente->telefono,
+                'tipo' => $cliente->tipo->value,
+                'observaciones' => $cliente->observaciones,
+                'ventas' => $ventas,
+            ],
+        ]);
+    }
+
     public function destroy($id)
     {
         $cliente = Cliente::where('cliente_id', $id)->firstOrFail();

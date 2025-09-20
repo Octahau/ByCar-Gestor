@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\ApiResponse;
+use App\DTOs\VentaData;
 use App\Enums\TipoCliente;
+use App\Http\Requests\StoreVentaRequest;
 use App\Models\Cliente;
 use App\Models\GastoVehiculo;
 use App\Models\User;
 use App\Models\Vehiculo;
 use App\Models\Venta;
+use App\Services\VentaService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,6 +20,10 @@ use Inertia\Inertia;
 
 class VentasController extends Controller
 {
+    public function __construct(
+        private VentaService $ventaService
+    ) {}
+
     public function index()
     {
         // Cargamos las ventas con los vehículos relacionados
@@ -45,126 +53,33 @@ class VentasController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreVentaRequest $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'dniCliente' => 'required|string|max:255',
-                'dominio' => 'required|string|max:255',
-                'procedencia' => 'nullable|string|max:255',
-                'valor_venta_ars' => 'nullable|numeric',
-                'valor_venta_usd' => 'nullable|numeric',
-                'fecha_venta' => 'nullable|date',
-                'vendedor' => 'nullable|string|max:255',
-            ]);
+            $ventaData = VentaData::fromArray($request->validated());
+            $result = $this->ventaService->crearVenta($ventaData);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
+            $formattedVenta = [
+                'id' => $result['venta']->venta_id,
+                'marca' => $result['venta']->vehiculo->marca ?? '',
+                'modelo' => $result['venta']->vehiculo->modelo ?? '',
+                'dominio' => $result['venta']->vehiculo->dominio ?? '',
+                'procedencia' => $result['venta']->procedencia ?? '',
+                'valor_venta_ars' => $result['venta']->valor_venta_ars ?? 0,
+                'valor_venta_usd' => $result['venta']->valor_venta_usd ?? 0,
+                'ganancia_real_ars' => $result['venta']->ganancia_real_ars ?? 0,
+                'ganancia_real_usd' => $result['venta']->ganancia_real_usd ?? 0,
+                'fecha' => $result['venta']->fecha ? $result['venta']->fecha->format('Y-m-d') : '',
+                'vendedor' => $result['venta']->user->name ?? '',
+            ];
 
-            $data = $validator->validated();
-
-            $cliente = Cliente::where('dni', $data['dniCliente'])->first();
-            if (! $cliente) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => ['dniCliente' => ['Cliente no encontrado']],
-                ], 404);
-            }
-
-            $vehiculo = Vehiculo::where('dominio', strtoupper($data['dominio']))->first();
-            if (! $vehiculo) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => ['dominio' => ['Vehículo no encontrado']],
-                ], 404);
-            }
-
-            $usuario = User::find(intval($data['vendedor']));
-            if (! $usuario) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => ['vendedor' => ['Vendedor no encontrado']],
-                ], 404);
-            }
-
-            $compraArs = $vehiculo->precioARS ?? 0;
-            $compraUsd = $vehiculo->precioUSD ?? 0;
-
-            $valorVentaUsd = isset($data['valor_venta_usd']) ? floatval($data['valor_venta_usd']) : 0;
-            $valorVentaArs = isset($data['valor_venta_ars']) ? floatval($data['valor_venta_ars']) : 0;
-
-            $gastoArs = 0;
-            $gastoUsd = 0;
-
-            $gastosVehiculo = GastoVehiculo::where('vehiculo_id', $vehiculo->vehiculo_id)->get();
-
-            foreach ($gastosVehiculo as $gasto) {
-                $gastoArs += $gasto->importe_ars ?? 0;
-                $gastoUsd += $gasto->importe_usd ?? 0;
-            }
-
-            $gananciaRealUsd = ($valorVentaUsd ?? 0) - ($compraUsd ?? 0) - $gastoUsd;
-            $gananciaRealArs = ($valorVentaArs ?? 0) - ($compraArs ?? 0) - $gastoArs;
-
-            $fechaVenta = isset($data['fecha_venta'])
-                ? Carbon::parse($data['fecha_venta'])->format('Y-m-d')
-                : now()->format('Y-m-d');
-
-            $venta = Venta::create([
-                'cliente_id' => $cliente->cliente_id,
-                'vehiculo_id' => $vehiculo->vehiculo_id,
-                'procedencia' => $data['procedencia'] ?? null,
-                'valor_venta_ars' => $data['valor_venta_ars'] ?? 0,
-                'valor_venta_usd' => $data['valor_venta_usd'] ?? 0,
-                'ganancia_real_ars' => $gananciaRealArs,
-                'ganancia_real_usd' => $gananciaRealUsd,
-                'fecha' => $fechaVenta ?? now(),
-                'usuario_id' => $usuario->id ?? null,
-            ]);
-
-            if ($venta) {
-                // Actualizar el estado del vehículo a VENDIDO
-                $vehiculo->estado = 'VENDIDO';
-                $vehiculo->save();
-
-                // Actualizar el tipo del cliente a COMPRADOR
-                $cliente->tipo = TipoCliente::Comprador;
-                $cliente->save();
-
-                $formattedVenta = [
-                    'id' => $venta->venta_id,
-                    'marca' => $vehiculo->marca ?? '',
-                    'modelo' => $vehiculo->modelo ?? '',
-                    'dominio' => $vehiculo->dominio ?? '',
-                    'procedencia' => $venta->procedencia ?? '',
-                    'valor_venta_ars' => $venta->valor_venta_ars ?? 0,
-                    'valor_venta_usd' => $venta->valor_venta_usd ?? 0,
-                    'ganancia_real_ars' => $venta->ganancia_real_ars ?? 0,
-                    'ganancia_real_usd' => $venta->ganancia_real_usd ?? 0,
-                    'fecha' => $venta->fecha ? Carbon::parse($venta->fecha)->format('Y-m-d') : '',
-                    'vendedor' => $usuario->name ?? '',
-                ];
-
-                return response()->json([
-                    'success' => true,
-                    'venta' => $formattedVenta,
-                    'message' => 'Venta registrada correctamente',
-                ]);
-            }
-
-            return response()->json([
-                'success' => false,
-                'message' => 'No se pudo registrar la venta',
-            ], 500);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al registrar la venta: '.$e->getMessage(),
-            ], 500);
+            return ApiResponse::success($formattedVenta, 'Venta registrada correctamente');
+        } catch (\App\Exceptions\ClienteNotFoundException $e) {
+            return ApiResponse::error('Cliente no encontrado', 404, ['dniCliente' => ['Cliente no encontrado']]);
+        } catch (\App\Exceptions\VehiculoNotFoundException $e) {
+            return ApiResponse::error('Vehículo no encontrado', 404, ['dominio' => ['Vehículo no encontrado']]);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error al registrar la venta: '.$e->getMessage());
         }
     }
 
@@ -449,18 +364,17 @@ class VentasController extends Controller
             $valorVentaUsd = isset($data['valor_venta_usd']) ? floatval($data['valor_venta_usd']) : $venta->valor_venta_usd;
             $valorVentaArs = isset($data['valor_venta_ars']) ? floatval($data['valor_venta_ars']) : $venta->valor_venta_ars;
 
-            $compraArs = $vehiculo->precioARS ?? 0;
-            $compraUsd = $vehiculo->precioUSD ?? 0;
-
-            $gastoArs = 0;
-            $gastoUsd = 0;
+            $compraArs = (float) ($vehiculo->precioARS ?? 0);
+            $compraUsd = (float) ($vehiculo->precioUSD ?? 0);
 
             $gastosVehiculo = GastoVehiculo::where('vehiculo_id', $vehiculo->vehiculo_id)->get();
 
-            foreach ($gastosVehiculo as $gasto) {
-                $gastoArs += $gasto->importe_ars ?? 0;
-                $gastoUsd += $gasto->importe_usd ?? 0;
-            }
+            $gastoArs = $gastosVehiculo->sum(function ($gasto) {
+                return (float) ($gasto->importe_ars ?? 0);
+            });
+            $gastoUsd = $gastosVehiculo->sum(function ($gasto) {
+                return (float) ($gasto->importe_usd ?? 0);
+            });
 
             $gananciaRealUsd = $valorVentaUsd - $compraUsd - $gastoUsd;
             $gananciaRealArs = $valorVentaArs - $compraArs - $gastoArs;

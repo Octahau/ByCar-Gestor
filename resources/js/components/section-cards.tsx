@@ -42,8 +42,8 @@ export function SectionCards() {
                 setResumen({
                     vehiculosDisponibles: vehData.cantidad ?? 0, 
                     ventasRealizadas: ventasData.cantidad ?? 0, 
-                    gastosCorrientes: gastosData.importeTotal ?? 0, 
-                    gastoVehiculo: gastoVehData.importeTotalArs ?? 0,
+                    gastosCorrientes: gastosData.importe ?? 0, 
+                    gastoVehiculo: gastoVehData.importe ?? 0,
                     porcentajes: {
                         vehiculos: { 
                             valor: vehData.porcentaje ?? 0, 

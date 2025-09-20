@@ -194,15 +194,11 @@ export function DataTable({
         if (searchTerm.trim()) {
             const searchLower = searchTerm.toLowerCase().trim();
             filtered = filtered.filter((item) => {
-                const nombreCliente = item.nombreCliente?.toLowerCase() || '';
-                const dniCliente = item.dniCliente?.toLowerCase() || '';
                 const marca = item.marca?.toLowerCase() || '';
                 const modelo = item.modelo?.toLowerCase() || '';
                 const dominio = item.dominio?.toLowerCase() || '';
                 
-                return nombreCliente.includes(searchLower) || 
-                       dniCliente.includes(searchLower) ||
-                       marca.includes(searchLower) ||
+                return marca.includes(searchLower) ||
                        modelo.includes(searchLower) ||
                        dominio.includes(searchLower);
             });

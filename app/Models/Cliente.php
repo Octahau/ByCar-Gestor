@@ -32,4 +32,10 @@ class Cliente extends Model
             'tipo' => TipoCliente::class,
         ];
     }
+
+    // Relación: un cliente puede tener muchas ventas
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'cliente_id', 'cliente_id');
+    }
 }

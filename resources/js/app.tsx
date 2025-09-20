@@ -5,8 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import { initializeTheme } from './hooks/use-appearance';
-import AppLayout from './layouts/app-layout';
-import Vehiculos from './pages/vehiculos';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -16,7 +15,11 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <ErrorBoundary>
+                <App {...props} />
+            </ErrorBoundary>
+        );
     },
     progress: {
         color: '#4B5563',
@@ -25,23 +28,21 @@ createInertiaApp({
 
 // This will set light / dark mode on load...
 initializeTheme();
+
 function App() {
     return (
-        <>
+        <ErrorBoundary>
             <Toaster
-                position="top-right" // posición de los toasts
+                position="top-right"
                 toastOptions={{
-                    duration: 3000, // tiempo que dura
+                    duration: 3000,
                     style: {
                         fontSize: '14px',
                         borderRadius: '8px',
                     },
                 }}
             />
-            <AppLayout>
-                <Vehiculos />
-            </AppLayout>{' '}
-        </>
+        </ErrorBoundary>
     );
 }
 

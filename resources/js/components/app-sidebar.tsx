@@ -9,15 +9,13 @@ import {
     IconHelp,
     IconInnerShadowTop,
     IconReport,
-    IconSearch,
-    IconSettings,
     IconUser,
 } from '@tabler/icons-react';
 import * as React from 'react';
 
 import { NavSecondary } from '@/components/nav-secondary';
 import { NavUser } from '@/components/nav-user';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
@@ -45,6 +43,11 @@ const data = {
             icon: IconUser, // documentos / gastos generales
         },
         {
+            title: 'Usuarios',
+            href: '/usuarios',
+            icon: IconUser, // usuarios del sistema
+        },
+        {
             title: 'Gastos corrientes',
             href: '/GastosCorrientes',
             icon: IconFileDescription, // documentos / gastos generales
@@ -55,8 +58,8 @@ const data = {
             icon: IconFileWord, // costos específicos de autos
         },
         {
-            title: 'Análisis de sensibilidad',
-            href: '/analisis-sensibilidad',
+            title: 'Balance mensual',
+            href: '/balance-mensual',
             icon: IconReport, // reportes / análisis
         },
     ],
@@ -119,6 +122,19 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { auth } = usePage().props as any;
+    const user = auth?.user;
+    const isAdmin = user?.tipo === 'admin';
+
+    // Filtrar elementos del menú basándose en el tipo de usuario
+    const filteredNavMain = data.navMain.filter((item) => {
+        // Solo mostrar "Usuarios" y "Balance mensual" a usuarios admin
+        if (item.title === 'Usuarios' || item.title === 'Balance mensual') {
+            return isAdmin;
+        }
+        return true; // Mostrar todos los demás elementos
+    });
+
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
@@ -136,7 +152,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             <SidebarContent>
                 <SidebarMenu>
-                    {data.navMain.map((item) => (
+                    {filteredNavMain.map((item) => (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton asChild tooltip={item.title}>
                                 <Link href={item.href}>

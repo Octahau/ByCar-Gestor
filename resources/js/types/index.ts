@@ -35,6 +35,8 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    dni: string;
+    tipo: 'admin' | 'empleado';
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;
@@ -79,6 +81,25 @@ export type Cliente = {
     email: string;
     tipo: TipoCliente;
     observaciones?: string;
+    ventas?: ClienteVenta[];
+}
+
+export type ClienteVenta = {
+    venta_id: number;
+    fecha: string;
+    vehiculo: {
+        marca: string;
+        modelo: string;
+        dominio: string;
+        anio: number;
+    } | null;
+    valor_venta_ars: number;
+    valor_venta_usd: number;
+    ganancia_real_ars: number;
+    vendedor: string;
+    usuario: {
+        name: string;
+    } | null;
 }
 
 export type Venta = {

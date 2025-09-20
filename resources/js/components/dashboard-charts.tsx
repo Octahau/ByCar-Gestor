@@ -1,59 +1,52 @@
 import { useEffect, useState } from 'react';
-import { GastosChart } from './gastos-chart';
-import { VentasChart } from './ventas-chart';
+import { VentasGastosChart } from './ventas-gastos-chart';
 
-interface ChartData {
+interface VentasGastosData {
   mes: string;
   nombreMes: string;
+  ventas: number;
   gastosCorrientes: number;
   gastosVehiculos: number;
-  total: number;
-}
-
-interface VentasData {
-  mes: string;
-  nombreMes: string;
-  total: number;
+  costoAdquisicion: number;
+  gastoTotal: number;
 }
 
 export function DashboardCharts() {
-  const [gastosData, setGastosData] = useState<ChartData[]>([]);
-  const [ventasData, setVentasData] = useState<VentasData[]>([]);
+  const [ventasGastosData, setVentasGastosData] = useState<VentasGastosData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener datos de gastos corrientes
-        const gastosCorrientesRes = await fetch('/gastos-corrientes-historicos');
-        const gastosCorrientesData = await gastosCorrientesRes.json();
-
-        // Obtener datos de gastos de vehículos
-        const gastosVehiculosRes = await fetch('/gastos-vehiculos-historicos');
-        const gastosVehiculosData = await gastosVehiculosRes.json();
-
-        // Obtener datos de ventas
-        const ventasRes = await fetch('/ventas-historicas');
-        const ventasData = await ventasRes.json();
-
-        if (gastosCorrientesData.success && gastosVehiculosData.success && ventasData.success) {
-          // Combinar datos de gastos
-          const combinedGastosData: ChartData[] = gastosCorrientesData.data.map((gasto: any) => {
-            const gastoVehiculo = gastosVehiculosData.data.find((gv: any) => gv.mes === gasto.mes);
-            return {
-              mes: gasto.mes,
-              nombreMes: gasto.nombreMes,
-              gastosCorrientes: gasto.total,
-              gastosVehiculos: gastoVehiculo ? gastoVehiculo.total : 0,
-              total: gasto.total + (gastoVehiculo ? gastoVehiculo.total : 0)
-            };
-          });
-
-          setGastosData(combinedGastosData);
-          setVentasData(ventasData.data);
+        setError(null);
+        console.log('Obteniendo datos de ventas y gastos combinados...');
+        
+        // Obtener datos combinados de ventas y gastos
+        const response = await fetch('/ventas-gastos-combinados');
+        
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          console.error('Respuesta no es JSON:', text.substring(0, 200));
+          throw new Error('La respuesta no es JSON válido');
+        }
+        
+        const data = await response.json();
+        console.log('Datos recibidos:', data);
+        
+        if (Array.isArray(data) && data.length > 0) {
+          setVentasGastosData(data);
+        } else {
+          throw new Error('Datos no válidos recibidos del servidor');
         }
       } catch (error) {
         console.error('Error al obtener los datos de las gráficas:', error);
+        setError(error instanceof Error ? error.message : 'Error desconocido');
       } finally {
         setLoading(false);
       }
@@ -69,9 +62,22 @@ export function DashboardCharts() {
           <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
           <div className="h-80 bg-gray-200 rounded"></div>
         </div>
-        <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="h-80 bg-gray-200 rounded"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+          <h3 className="text-lg font-semibold text-red-800">Error al cargar los datos</h3>
+          <p className="text-red-600">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+          >
+            Reintentar
+          </button>
         </div>
       </div>
     );
@@ -79,8 +85,7 @@ export function DashboardCharts() {
 
   return (
     <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
-      <GastosChart data={gastosData} />
-      <VentasChart data={ventasData} />
+      <VentasGastosChart data={ventasGastosData} />
     </div>
   );
 }

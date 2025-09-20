@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { IconTrendingUp, IconCurrencyDollar } from '@tabler/icons-react';
-import { Link } from '@inertiajs/react';
 
 interface GananciasData {
   gananciaTotal: number;
@@ -32,14 +30,12 @@ export function GananciasCards() {
         const gananciaMesRes = await fetch('/ganancia-mes-actual');
         const gananciaMesData = await gananciaMesRes.json();
 
-        if (gananciaTotalData.success && gananciaMesData.success) {
-          setGananciasData({
-            gananciaTotal: gananciaTotalData.gananciaTotal || 0,
-            gananciaMes: gananciaMesData.gananciaMes || 0,
-            porcentaje: gananciaMesData.porcentaje || 0,
-            tendencia: gananciaMesData.tendencia || 'neutra'
-          });
-        }
+        setGananciasData({
+          gananciaTotal: gananciaTotalData.gananciaTotal || 0,
+          gananciaMes: gananciaMesData.importe || 0,
+          porcentaje: gananciaMesData.porcentaje || 0,
+          tendencia: gananciaMesData.tendencia || 'neutra'
+        });
       } catch (error) {
         console.error('Error al obtener los datos de ganancias:', error);
       } finally {
@@ -86,13 +82,6 @@ export function GananciasCards() {
             </Badge>
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <Link href="/ventas" className="w-full">
-            <Button variant="secondary" className="w-full">
-              Ver Ventas
-            </Button>
-          </Link>
-        </CardFooter>
       </Card>
 
       {/* Card de Ganancia del Mes Actual */}
@@ -125,13 +114,6 @@ export function GananciasCards() {
             </Badge>
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <Link href="/ventas" className="w-full">
-            <Button variant="secondary" className="w-full">
-              Ver Ventas
-            </Button>
-          </Link>
-        </CardFooter>
       </Card>
     </div>
   );

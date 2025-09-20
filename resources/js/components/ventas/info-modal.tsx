@@ -154,215 +154,212 @@ export default function InfoVentaModal({
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-6 py-4">
-                        {/* Información del Cliente */}
-                        <div className="bg-muted/50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                                <IconUser className="h-5 w-5 text-blue-600" />
-                                <h3 className="text-lg font-semibold">Información del Cliente</h3>
+                <div className="space-y-4 py-4">
+                    {/* Información del Cliente */}
+                    <div className="bg-muted/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <IconUser className="h-5 w-5 text-blue-600" />
+                            <h3 className="text-lg font-semibold">Información del Cliente</h3>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Nombre:</span>
+                                <p className="font-medium">{ventaCompleta.cliente.nombre || '-'}</p>
                             </div>
-                            <div className="space-y-3">
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Nombre:</span>
-                                    <p className="font-medium">{ventaCompleta.cliente.nombre || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">DNI:</span>
-                                    <p className="font-medium">{ventaCompleta.cliente.dni || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Email:</span>
-                                    <p className="font-medium">{ventaCompleta.cliente.email || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Teléfono:</span>
-                                    <p className="font-medium">{ventaCompleta.cliente.telefono || '-'}</p>
-                                </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">DNI:</span>
+                                <p className="font-medium">{ventaCompleta.cliente.dni || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Email:</span>
+                                <p className="font-medium">{ventaCompleta.cliente.email || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Teléfono:</span>
+                                <p className="font-medium">{ventaCompleta.cliente.telefono || '-'}</p>
                             </div>
                         </div>
-
-                        {/* Información del Vehículo */}
-                        <div className="bg-muted/50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                                <IconCar className="h-5 w-5 text-green-600" />
-                                <h3 className="text-lg font-semibold">Información del Vehículo</h3>
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Marca:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.marca || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Modelo:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.modelo || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Dominio:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.dominio || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Año:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.anio || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Color:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.color || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Kilometraje:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.kilometraje?.toLocaleString('es-AR') || '-'} km</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Ubicación:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.ubicacion || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Estado:</span>
-                                    <p className="font-medium">{ventaCompleta.vehiculo.estado || '-'}</p>
-                                </div>
-                                <div className="col-span-2">
-                                    <span className="text-sm font-medium text-muted-foreground">Fecha de ingreso:</span>
-                                    <p className="font-medium">{formatDate(ventaCompleta.vehiculo.fecha_ingreso)}</p>
-                                </div>
-                                {ventaCompleta.vehiculo.info_auto && (
-                                    <div className="col-span-2">
-                                        <span className="text-sm font-medium text-muted-foreground">Información adicional:</span>
-                                        <p className="font-medium">{ventaCompleta.vehiculo.info_auto}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
                     </div>
 
-                    {/* Columna Central */}
-                    <div className="space-y-6">
-                        {/* Información del Vendedor */}
-                        <div className="bg-muted/50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                                <IconUserCheck className="h-5 w-5 text-indigo-600" />
-                                <h3 className="text-lg font-semibold">Información del Vendedor</h3>
+                    {/* Información del Vehículo */}
+                    <div className="bg-muted/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <IconCar className="h-5 w-5 text-green-600" />
+                            <h3 className="text-lg font-semibold">Información del Vehículo</h3>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Marca:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.marca || '-'}</p>
                             </div>
-                            <div className="space-y-3">
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Nombre:</span>
-                                    <p className="font-medium">{ventaCompleta.vendedor.name || '-'}</p>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Modelo:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.modelo || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Dominio:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.dominio || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Año:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.anio || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Color:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.color || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Kilometraje:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.kilometraje?.toLocaleString('es-AR') || '-'} km</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Ubicación:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.ubicacion || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Estado:</span>
+                                <p className="font-medium">{ventaCompleta.vehiculo.estado || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Fecha de ingreso:</span>
+                                <p className="font-medium">{formatDate(ventaCompleta.vehiculo.fecha_ingreso)}</p>
+                            </div>
+                        </div>
+                        {ventaCompleta.vehiculo.info_auto && (
+                            <div className="mt-4">
+                                <span className="text-sm font-medium text-muted-foreground">Información adicional:</span>
+                                <p className="font-medium mt-1">{ventaCompleta.vehiculo.info_auto}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Información del Vendedor */}
+                    <div className="bg-muted/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <IconUserCheck className="h-5 w-5 text-indigo-600" />
+                            <h3 className="text-lg font-semibold">Información del Vendedor</h3>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Nombre:</span>
+                                <p className="font-medium">{ventaCompleta.vendedor.name || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Email:</span>
+                                <p className="font-medium">{ventaCompleta.vendedor.email || '-'}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Información de la Venta */}
+                    <div className="bg-muted/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <IconReceipt className="h-5 w-5 text-purple-600" />
+                            <h3 className="text-lg font-semibold">Información de la Venta</h3>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Fecha de venta:</span>
+                                <p className="font-medium">{formatDate(ventaCompleta.venta.fecha)}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Procedencia:</span>
+                                <p className="font-medium">{ventaCompleta.venta.procedencia || '-'}</p>
+                            </div>
+                            <div>
+                                <span className="text-sm font-medium text-muted-foreground">Fecha de registro:</span>
+                                <p className="font-medium">{formatDate(ventaCompleta.venta.created_at)}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Información Financiera */}
+                    <div className="bg-muted/50 rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                            <IconReceipt className="h-5 w-5 text-orange-600" />
+                            <h3 className="text-lg font-semibold">Información Financiera</h3>
+                        </div>
+                        <div className="space-y-4">
+                            {/* Precios de Compra */}
+                            <div className="bg-background rounded-lg p-3 border">
+                                <h4 className="font-medium text-sm text-muted-foreground mb-2">Precios de Compra</h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Precio ARS:</span>
+                                        <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.precio_compra_ars, 'ARS')}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Precio USD:</span>
+                                        <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.precio_compra_usd, 'USD')}</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Email:</span>
-                                    <p className="font-medium">{ventaCompleta.vendedor.email || '-'}</p>
+                            </div>
+
+                            {/* Precios Sugeridos de Venta */}
+                            <div className="bg-background rounded-lg p-3 border">
+                                <h4 className="font-medium text-sm text-muted-foreground mb-2">Precios Sugeridos de Venta</h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Precio Sugerido ARS:</span>
+                                        <span className="font-medium text-blue-600">{formatCurrency(ventaCompleta.vehiculo.precio_venta_sugerido_ars, 'ARS')}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Precio Sugerido USD:</span>
+                                        <span className="font-medium text-blue-600">{formatCurrency(ventaCompleta.vehiculo.precio_venta_sugerido_usd, 'USD')}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Gastos del Vehículo */}
+                            <div className="bg-background rounded-lg p-3 border">
+                                <h4 className="font-medium text-sm text-muted-foreground mb-2">Gastos del Vehículo</h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Gastos ARS:</span>
+                                        <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.total_gastos_ars, 'ARS')}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Gastos USD:</span>
+                                        <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.total_gastos_usd, 'USD')}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Precios de Venta */}
+                            <div className="bg-background rounded-lg p-3 border">
+                                <h4 className="font-medium text-sm text-muted-foreground mb-2">Precios de Venta</h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Venta ARS:</span>
+                                        <span className="font-medium text-green-600">{formatCurrency(ventaCompleta.venta.valor_venta_ars, 'ARS')}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Venta USD:</span>
+                                        <span className="font-medium text-green-600">{formatCurrency(ventaCompleta.venta.valor_venta_usd, 'USD')}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Ganancias */}
+                            <div className="bg-background rounded-lg p-3 border">
+                                <h4 className="font-medium text-sm text-muted-foreground mb-2">Ganancias Reales</h4>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Ganancia ARS:</span>
+                                        <span className={`font-medium ${ventaCompleta.venta.ganancia_real_ars >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                            {formatCurrency(ventaCompleta.venta.ganancia_real_ars, 'ARS')}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-sm">Ganancia USD:</span>
+                                        <span className={`font-medium ${ventaCompleta.venta.ganancia_real_usd >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                            {formatCurrency(ventaCompleta.venta.ganancia_real_usd, 'USD')}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        {/* Información de la Venta */}
-                        <div className="bg-muted/50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                                <IconReceipt className="h-5 w-5 text-purple-600" />
-                                <h3 className="text-lg font-semibold">Información de la Venta</h3>
-                            </div>
-                            <div className="space-y-3">
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Fecha de venta:</span>
-                                    <p className="font-medium">{formatDate(ventaCompleta.venta.fecha)}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Procedencia:</span>
-                                    <p className="font-medium">{ventaCompleta.venta.procedencia || '-'}</p>
-                                </div>
-                                <div>
-                                    <span className="text-sm font-medium text-muted-foreground">Fecha de registro:</span>
-                                    <p className="font-medium">{formatDate(ventaCompleta.venta.created_at)}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Información Financiera */}
-                        <div className="bg-muted/50 rounded-lg p-4">
-                            <div className="flex items-center gap-2 mb-3">
-                                <IconReceipt className="h-5 w-5 text-orange-600" />
-                                <h3 className="text-lg font-semibold">Información Financiera</h3>
-                            </div>
-                            <div className="space-y-4">
-                                {/* Precios de Compra */}
-                                <div className="space-y-2">
-                                    <h4 className="font-medium text-sm text-muted-foreground">Precios de Compra</h4>
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Precio ARS:</span>
-                                            <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.precio_compra_ars, 'ARS')}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Precio USD:</span>
-                                            <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.precio_compra_usd, 'USD')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Precios Sugeridos de Venta */}
-                                <div className="space-y-2">
-                                    <h4 className="font-medium text-sm text-muted-foreground">Precios Sugeridos de Venta</h4>
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Precio Sugerido ARS:</span>
-                                            <span className="font-medium text-blue-600">{formatCurrency(ventaCompleta.vehiculo.precio_venta_sugerido_ars, 'ARS')}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Precio Sugerido USD:</span>
-                                            <span className="font-medium text-blue-600">{formatCurrency(ventaCompleta.vehiculo.precio_venta_sugerido_usd, 'USD')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Gastos del Vehículo */}
-                                <div className="space-y-2">
-                                    <h4 className="font-medium text-sm text-muted-foreground">Gastos del Vehículo</h4>
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Gastos ARS:</span>
-                                            <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.total_gastos_ars, 'ARS')}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Gastos USD:</span>
-                                            <span className="font-medium">{formatCurrency(ventaCompleta.vehiculo.total_gastos_usd, 'USD')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Precios de Venta */}
-                                <div className="space-y-2">
-                                    <h4 className="font-medium text-sm text-muted-foreground">Precios de Venta</h4>
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Venta ARS:</span>
-                                            <span className="font-medium text-green-600">{formatCurrency(ventaCompleta.venta.valor_venta_ars, 'ARS')}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Venta USD:</span>
-                                            <span className="font-medium text-green-600">{formatCurrency(ventaCompleta.venta.valor_venta_usd, 'USD')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Ganancias */}
-                                <div className="space-y-2">
-                                    <h4 className="font-medium text-sm text-muted-foreground">Ganancias Reales</h4>
-                                    <div className="space-y-1">
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Ganancia ARS:</span>
-                                            <span className={`font-medium ${ventaCompleta.venta.ganancia_real_ars >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                                {formatCurrency(ventaCompleta.venta.ganancia_real_ars, 'ARS')}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-sm">Ganancia USD:</span>
-                                            <span className={`font-medium ${ventaCompleta.venta.ganancia_real_usd >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                                {formatCurrency(ventaCompleta.venta.ganancia_real_usd, 'USD')}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
                 </div>
 
                 <div className="flex justify-end pt-4">

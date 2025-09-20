@@ -17,7 +17,14 @@ export default function FiltrosModal({ data, onFiltersChange }: FiltrosModalProp
 
   // Obtener valores únicos de vendedor
   const vendedoresUnicos = React.useMemo(() => {
-    const vendedores = data.map(item => item.vendedor).filter(Boolean);
+    if (!Array.isArray(data)) {
+      return [];
+    }
+    
+    const vendedores = data
+      .filter(item => item && typeof item === 'object' && item.vendedor) // Filtrar elementos válidos
+      .map(item => item.vendedor)
+      .filter(Boolean);
     return Array.from(new Set(vendedores)).sort();
   }, [data]);
 

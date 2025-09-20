@@ -91,7 +91,7 @@ class GastoVehiculoController extends Controller
                 : now()->format('Y-m-d');
 
             $gasto = GastoVehiculo::create([
-                'vehiculo_id' => $vehiculo->id,
+                'vehiculo_id' => $vehiculo->vehiculo_id,
                 'tipo_gasto' => $data['tipo_gasto'],
                 'descripcion' => $data['descripcion'] ?? '',
                 'operador' => $usuario->name,

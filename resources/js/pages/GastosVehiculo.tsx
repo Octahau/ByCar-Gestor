@@ -1,7 +1,7 @@
 'use client';
 import { DataTable } from '@/components/gasto-vehiculo/gastos-table';
 import AddGastoVehiculoModal from '@/components/gasto-vehiculo/gastos-vehiculos-modal';
-import DateFilter from '@/components/vehicles/date-filter';
+import DateFilter from '@/components/vehiculos/date-filter';
 import AppLayout from '@/layouts/app-layout';
 import { GastoVehiculoTable } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
