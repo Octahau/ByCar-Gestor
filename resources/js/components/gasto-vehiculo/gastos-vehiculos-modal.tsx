@@ -83,7 +83,6 @@ export default function AddGastoVehiculoModal({ onGastoCreado, open, onOpenChang
                     <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
                         {[
                             { name: 'dominio', label: 'Dominio', type: 'text', required: true },
-                            { name: 'tipo_gasto', label: 'Motivo', type: 'text', required: true },
                             { name: 'descripcion', label: 'Descripción', type: 'text', required: false },
                             { name: 'importe', label: 'Importe (ARS)', type: 'number', required: true },
                             { name: 'fecha', label: 'Fecha', type: 'date', required: false },
@@ -103,6 +102,33 @@ export default function AddGastoVehiculoModal({ onGastoCreado, open, onOpenChang
                                 )}
                             />
                         ))}
+                        {/* Select de tipo de gasto */}
+                        <FormField
+                            control={form.control}
+                            name="tipo_gasto"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Tipo de Gasto</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger className="w-full">
+                                                <SelectValue placeholder="Seleccionar tipo" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="Insumos">Insumos</SelectItem>
+                                                <SelectItem value="Combustible">Combustible</SelectItem>
+                                                <SelectItem value="Mantenimiento">Mantenimiento</SelectItem>
+                                                <SelectItem value="Familia">Familia</SelectItem>
+                                                <SelectItem value="Lavalle">Lavalle</SelectItem>
+                                                <SelectItem value="Impuestos">Impuestos</SelectItem>
+                                                <SelectItem value="Otros">Otros</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         {/* Select de empleados */}
                         <FormField
                             control={form.control}

@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('GastosVehiculos', GastoVehiculoController::class);
     Route::get('/balance-mensual', [BalanceMensualController::class, 'index'])->name('balance.mensual')->middleware('admin');
 
-    Route::get('/empleados', [UserController::class, 'empleados'])->name('empleados.index')->middleware('admin');
+    Route::get('/empleados', [UserController::class, 'empleados'])->name('empleados.index')->middleware('auth');
 
     // Rutas del dashboard - centralizadas en ResumenController
     Route::get('/vehiculos-cantidad', [ResumenController::class, 'getVehiculos'])->name('vehiculos.cantidad')->middleware('auth');

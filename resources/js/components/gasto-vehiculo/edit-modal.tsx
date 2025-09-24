@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -10,9 +10,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'react-hot-toast';
+import { Empleado } from '@/types';
 
 const editGastoSchema = z.object({
-    operador: z.string().min(1, 'El operador es requerido'),
+    operador: z.number().min(1, 'El operador es requerido'),
     tipo_gasto: z.string().min(1, 'El tipo de gasto es requerido'),
     descripcion: z.string().optional(),
     importe_ars: z.number().min(0, 'El importe debe ser mayor o igual a 0').optional(),
@@ -42,10 +43,12 @@ interface EditGastoModalProps {
 }
 
 export function EditGastoModal({ gasto, isOpen, onClose, onGastoActualizado }: EditGastoModalProps) {
+    const [empleados, setEmpleados] = useState<Empleado[]>([]);
+    
     const form = useForm<EditGastoFormData>({
         resolver: zodResolver(editGastoSchema),
         defaultValues: {
-            operador: '',
+            operador: 0,
             tipo_gasto: '',
             descripcion: '',
             importe_ars: 0,
@@ -55,10 +58,22 @@ export function EditGastoModal({ gasto, isOpen, onClose, onGastoActualizado }: E
         },
     });
 
+    // Cargar empleados desde el backend
+    useEffect(() => {
+        fetch('/empleados')
+            .then((res) => res.json())
+            .then((data) => setEmpleados(data))
+            .catch((err) => console.error('Error cargando empleados:', err));
+    }, []);
+
     React.useEffect(() => {
-        if (gasto) {
+        if (gasto && empleados.length > 0) {
+            // Buscar el ID del operador por nombre
+            const operadorEncontrado = empleados.find(emp => emp.name === gasto.operador);
+            const operadorId = operadorEncontrado ? operadorEncontrado.id : 0;
+            
             form.reset({
-                operador: gasto.operador || '',
+                operador: operadorId,
                 tipo_gasto: gasto.tipo_gasto || '',
                 descripcion: gasto.descripcion || '',
                 importe_ars: gasto.importe_ars || 0,
@@ -67,7 +82,7 @@ export function EditGastoModal({ gasto, isOpen, onClose, onGastoActualizado }: E
                 fecha: gasto.fecha || '',
             });
         }
-    }, [gasto, form]);
+    }, [gasto, form, empleados]);
 
     const onSubmit = async (data: EditGastoFormData) => {
         if (!gasto) return;
@@ -116,7 +131,18 @@ export function EditGastoModal({ gasto, isOpen, onClose, onGastoActualizado }: E
                                     <FormItem>
                                         <FormLabel>Operador</FormLabel>
                                         <FormControl>
-                                            <Input {...field} placeholder="Nombre del operador" />
+                                            <Select onValueChange={(value) => field.onChange(Number(value))} value={String(field.value)}>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Seleccione un operador" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {empleados.map((empleado) => (
+                                                        <SelectItem key={empleado.id} value={String(empleado.id)}>
+                                                            {empleado.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -136,11 +162,13 @@ export function EditGastoModal({ gasto, isOpen, onClose, onGastoActualizado }: E
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="mantenimiento">Mantenimiento</SelectItem>
-                                                <SelectItem value="combustible">Combustible</SelectItem>
-                                                <SelectItem value="seguro">Seguro</SelectItem>
-                                                <SelectItem value="patente">Patente</SelectItem>
-                                                <SelectItem value="otros">Otros</SelectItem>
+                                                <SelectItem value="Insumos">Insumos</SelectItem>
+                                                <SelectItem value="Combustible">Combustible</SelectItem>
+                                                <SelectItem value="Mantenimiento">Mantenimiento</SelectItem>
+                                                <SelectItem value="Familia">Familia</SelectItem>
+                                                <SelectItem value="Lavalle">Lavalle</SelectItem>
+                                                <SelectItem value="Impuestos">Impuestos</SelectItem>
+                                                <SelectItem value="Otros">Otros</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />

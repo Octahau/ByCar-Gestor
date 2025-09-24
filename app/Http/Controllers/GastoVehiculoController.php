@@ -73,7 +73,7 @@ class GastoVehiculoController extends Controller
                 ], 404);
             }
 
-            $vehiculo = Vehiculo::where('dominio', $data['dominio'])->first();
+            $vehiculo = Vehiculo::where('dominio', strtoupper($data['dominio']))->first();
             if (! $vehiculo) {
                 Log::error('Vehiculo no encontrado', $data['dominio']);
 
@@ -141,8 +141,20 @@ class GastoVehiculoController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            // Log para debugging
+            Log::info('Actualizando gasto vehiculo', ['id' => $id, 'request_data' => $request->all()]);
+            
+            // Validar que el ID sea válido
+            if (!$id || !is_numeric($id)) {
+                Log::error('ID de gasto inválido', ['id' => $id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'ID de gasto inválido',
+                ], 400);
+            }
+
             $validator = Validator::make($request->all(), [
-                'operador' => 'required|string|max:255',
+                'operador' => 'required|integer|exists:users,id',
                 'tipo_gasto' => 'required|string|max:100',
                 'descripcion' => 'nullable|string|max:255',
                 'importe_ars' => 'nullable|numeric|min:0',
@@ -158,8 +170,22 @@ class GastoVehiculoController extends Controller
                 ], 422);
             }
 
-            $gasto = GastoVehiculo::find($id);
+            Log::info('Modelo a usar: GastoVehiculo', ['tabla_esperada' => 'gasto_vehiculo']);
+            
+            // Usar consulta directa para evitar confusión de tablas
+            $gasto = \Illuminate\Support\Facades\DB::table('gasto_vehiculo')
+                ->where('id', $id)
+                ->first();
+                
+            if ($gasto) {
+                // Convertir a modelo
+                $gasto = \App\Models\GastoVehiculo::find($gasto->id);
+            }
+            
+            Log::info('Buscando gasto vehiculo', ['id' => $id, 'gasto_encontrado' => $gasto ? 'si' : 'no']);
+            
             if (! $gasto) {
+                Log::error('Gasto vehiculo no encontrado', ['id' => $id]);
                 return response()->json([
                     'success' => false,
                     'message' => 'Gasto no encontrado',
@@ -168,8 +194,17 @@ class GastoVehiculoController extends Controller
 
             $data = $validator->validated();
 
+            // Buscar el usuario por ID para obtener el nombre
+            $usuario = User::find($data['operador']);
+            if (! $usuario) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['operador' => ['Operador no encontrado']],
+                ], 404);
+            }
+
             $gasto->update([
-                'operador' => $data['operador'],
+                'operador' => $usuario->name,
                 'tipo_gasto' => $data['tipo_gasto'],
                 'descripcion' => $data['descripcion'] ?? '',
                 'importe_ars' => $data['importe_ars'] ?? 0,
